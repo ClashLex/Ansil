@@ -48,13 +48,11 @@
   margin: 0; 
   padding: 0; 
   -webkit-tap-highlight-color: transparent !important;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
 }
 
 /* FIX: Suppress default active focus states and selection flashes across clickable/interactable layout blocks */
 a, button, input, textarea, .interactable, .brutal-link, .sticker, .pixel-pill, .bento-card {
   -webkit-tap-highlight-color: transparent !important;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   outline: none !important;
 }
 
@@ -514,6 +512,9 @@ footer {
     <span>OPEN SOURCE</span><span class="dot">■</span>
     <span>VIBE CODING IS A SUPERPOWER</span><span class="dot">■</span>
     <span>PROMPT ENGINEERING</span><span class="dot">■</span>
+    <span>MACHINE LEARNING</span><span class="dot">■</span>
+    <span>HARDWARE & IOT</span><span class="dot">■</span>
+    <span>OPEN SOURCE</span><span class="dot">■</span>
   </div>
 </div>
 <div class="marquee-container rev interactable">
@@ -647,7 +648,8 @@ footer {
       cur.style.left = e.clientX + 'px'; 
       cur.style.top = e.clientY + 'px'; 
     });
-    document.querySelectorAll('.interactable, a, .bento-card, .pixel-pill, .brutal-link').forEach(el => {
+    // FIX: Include 'button' and other interactable controls in the custom cursor hover effects
+    document.querySelectorAll('.interactable, a, button, .bento-card, .pixel-pill, .brutal-link').forEach(el => {
       el.addEventListener('mouseenter', () => cur.classList.add('hov'));
       el.addEventListener('mouseleave', () => cur.classList.remove('hov'));
     });
@@ -660,30 +662,149 @@ footer {
     if (p && window.innerWidth > 1024) p.style.transform = `translateY(${s * -0.15}px)`;
   });
 
-  // 3. Draggable OS Window
+  // 3. Draggable OS Window & Controls
   const win = document.getElementById('drag-window');
   const handle = document.getElementById('drag-handle');
-  if (win && handle && window.innerWidth > 768) {
+  if (win && handle) {
     let dragging = false, ix=0, iy=0, ox=0, oy=0, cx=0, cy=0;
+    let isMaximized = false;
+    let originalStyle = {};
     handle.style.cursor = 'grab';
-    handle.addEventListener('mousedown', e => {
-      dragging = true; ix = e.clientX - ox; iy = e.clientY - oy;
+
+    const startDrag = (e) => {
+      if (window.innerWidth <= 768) return;
+      if (isMaximized) return;
+      if (e.target.closest('.controls')) return; // FIX: Ignore drag triggering on close/min/max window controls
+      dragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      ix = clientX - ox; iy = clientY - oy;
       handle.style.cursor = 'grabbing'; win.style.zIndex = 100;
-    });
-    window.addEventListener('mouseup', () => { 
-      dragging = false; handle.style.cursor = 'grab'; win.style.zIndex = 1; ox = cx; oy = cy; 
-    });
-    window.addEventListener('mousemove', e => {
+    };
+
+    const endDrag = () => {
       if (!dragging) return;
-      e.preventDefault();
-      cx = e.clientX - ix; cy = e.clientY - iy;
+      dragging = false; handle.style.cursor = 'grab'; win.style.zIndex = 1; ox = cx; oy = cy;
+    };
+
+    const drag = (e) => {
+      if (!dragging) return;
+      if (e.cancelable) e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      cx = clientX - ix; cy = clientY - iy;
       // Clamp so the window can't go off-screen
-      const maxX = window.innerWidth * 0.3;
-      const maxY = window.innerHeight * 0.3;
+      const maxX = window.innerWidth * 0.35;
+      const maxY = window.innerHeight * 0.35;
       cx = Math.max(-maxX, Math.min(maxX, cx));
       cy = Math.max(-maxY, Math.min(maxY, cy));
       win.style.transform = `translate(${cx}px, ${cy}px) rotate(-0.5deg)`;
-    });
+    };
+
+    // Attach event listeners for mouse and touch interactions (FIX: Add touch support for dragging on tablets/mobile)
+    handle.addEventListener('mousedown', startDrag);
+    handle.addEventListener('touchstart', startDrag, { passive: false });
+
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchend', endDrag);
+    window.addEventListener('touchcancel', endDrag);
+
+    window.addEventListener('mousemove', drag, { passive: false });
+    window.addEventListener('touchmove', drag, { passive: false });
+
+    // FIX: Functional Red (Close) control button
+    const closeBtn = handle.querySelector('.controls .btn:nth-child(1)');
+    if (closeBtn) {
+      closeBtn.style.cursor = 'pointer';
+      closeBtn.addEventListener('click', () => {
+        win.style.display = 'none';
+        
+        // Show restore button
+        let restoreBtn = document.getElementById('restore-terminal-btn');
+        if (!restoreBtn) {
+          restoreBtn = document.createElement('button');
+          restoreBtn.id = 'restore-terminal-btn';
+          restoreBtn.innerHTML = '⚡ RESTORE TERMINAL';
+          restoreBtn.style.position = 'fixed';
+          restoreBtn.style.bottom = '20px';
+          restoreBtn.style.right = '20px';
+          restoreBtn.style.zIndex = '999';
+          restoreBtn.style.background = 'var(--bg-lime)';
+          restoreBtn.style.color = 'var(--black)';
+          restoreBtn.style.border = 'var(--b-heavy)';
+          restoreBtn.style.padding = '10px 15px';
+          restoreBtn.style.fontFamily = 'var(--ff-mono)';
+          restoreBtn.style.fontWeight = '700';
+          restoreBtn.style.boxShadow = '4px 4px 0 var(--black)';
+          restoreBtn.style.cursor = 'pointer';
+          restoreBtn.className = 'interactable';
+          
+          restoreBtn.addEventListener('click', () => {
+            win.style.display = 'block';
+            restoreBtn.remove();
+          });
+          
+          document.body.appendChild(restoreBtn);
+          
+          if (window.matchMedia('(hover:hover) and (pointer:fine)').matches && cur) {
+            restoreBtn.addEventListener('mouseenter', () => cur.classList.add('hov'));
+            restoreBtn.addEventListener('mouseleave', () => cur.classList.remove('hov'));
+          }
+        }
+      });
+    }
+
+    // FIX: Functional Yellow (Minimize) control button (collapse content)
+    const minBtn = handle.querySelector('.controls .btn:nth-child(2)');
+    const osBody = win.querySelector('.os-body');
+    if (minBtn && osBody) {
+      minBtn.style.cursor = 'pointer';
+      minBtn.addEventListener('click', () => {
+        if (osBody.style.display === 'none') {
+          osBody.style.display = 'flex';
+          win.style.height = 'auto';
+        } else {
+          osBody.style.display = 'none';
+        }
+      });
+    }
+
+    // FIX: Functional Green (Maximize) control button
+    const maxBtn = handle.querySelector('.controls .btn:nth-child(3)');
+    if (maxBtn) {
+      maxBtn.style.cursor = 'pointer';
+      maxBtn.addEventListener('click', () => {
+        if (!isMaximized) {
+          // Save original styles
+          originalStyle = {
+            position: win.style.position,
+            top: win.style.top,
+            left: win.style.left,
+            transform: win.style.transform,
+            width: win.style.width,
+            maxWidth: win.style.maxWidth,
+            height: win.style.height,
+            margin: win.style.margin,
+            zIndex: win.style.zIndex
+          };
+          // Apply maximized styles
+          win.style.position = 'fixed';
+          win.style.top = '0';
+          win.style.left = '0';
+          win.style.width = '100vw';
+          win.style.height = '100vh';
+          win.style.maxWidth = '100vw';
+          win.style.transform = 'none';
+          win.style.margin = '0';
+          win.style.zIndex = '999';
+          isMaximized = true;
+        } else {
+          // Restore original styles
+          Object.assign(win.style, originalStyle);
+          isMaximized = false;
+        }
+      });
+    }
   }
 
   // 4. Terminal Typewriter
@@ -691,7 +812,7 @@ footer {
   let i = 0;
   const target = document.getElementById('typewriter-text');
   function typeWriter() {
-    if (i < text.length) {
+    if (target && i < text.length) {
       if(text.charAt(i) === '\n') {
         target.innerHTML += "<br><br>"; i++;
       } else {
