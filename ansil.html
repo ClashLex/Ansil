@@ -106,7 +106,7 @@ body {
 /* ── PARALLAX WIREFRAME PILLAR ── */
 .wireframe-pillar {
   position: fixed; top: -10%; left: 3%;
-  width: 140px; height: 120vh;
+  width: 140px; height: 300vh;
   background-image: 
       repeating-linear-gradient(90deg, transparent, transparent 18px, var(--black) 18px, var(--black) 22px),
       repeating-linear-gradient(0deg, transparent, transparent 48px, var(--black) 48px, var(--black) 52px);
@@ -785,7 +785,8 @@ footer {
             maxWidth: win.style.maxWidth,
             height: win.style.height,
             margin: win.style.margin,
-            zIndex: win.style.zIndex
+            zIndex: win.style.zIndex,
+            overflowY: win.style.overflowY
           };
           // Apply maximized styles
           win.style.position = 'fixed';
@@ -797,6 +798,7 @@ footer {
           win.style.transform = 'none';
           win.style.margin = '0';
           win.style.zIndex = '999';
+          win.style.overflowY = 'auto';
           isMaximized = true;
         } else {
           // Restore original styles
