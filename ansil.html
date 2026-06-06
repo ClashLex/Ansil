@@ -114,7 +114,8 @@ body {
   border: var(--b-heavy);
   box-shadow: var(--sh-hard);
   z-index: 0; opacity: 0.9; pointer-events: none;
-  clip-path: polygon(10% 0, 90% 0, 100% 5%, 100% 95%, 90% 100%, 10% 100%, 0 95%, 0 5%);
+  /* FIX: Use fixed pixel values (px) for the chamfered corners of the clip-path. Percentages (like 5%) scale with element height, causing massive tapers on tall/dynamic columns. */
+  clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px);
 }
 @media (max-width: 1024px) { .wireframe-pillar { display: none; } }
 
@@ -656,12 +657,38 @@ footer {
     });
   }
 
-  // 2. Parallax Pillar
-  window.addEventListener('scroll', () => {
-    const s = window.scrollY;
-    const p = document.getElementById('pillar');
-    if (p && window.innerWidth > 1024) p.style.transform = `translateY(${s * -0.15}px)`;
-  });
+  // 2. Parallax Pillar & Dynamic Height Adjustment
+  const p = document.getElementById('pillar');
+  if (p) {
+    const adjustPillarHeight = () => {
+      if (window.innerWidth <= 1024) return;
+      const docHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight,
+        document.body.clientHeight,
+        document.documentElement.clientHeight
+      );
+      // Ensure the pillar is always taller than the page scroll height plus parallax offset
+      p.style.height = (docHeight * 1.5) + 'px';
+    };
+
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY;
+      if (window.innerWidth > 1024) {
+        p.style.transform = `translateY(${s * -0.15}px)`;
+      }
+    });
+
+    window.addEventListener('resize', adjustPillarHeight);
+    window.addEventListener('load', adjustPillarHeight);
+    // Initial run
+    adjustPillarHeight();
+    // Also run typewriter/intro updates in case content changes height dynamically
+    setTimeout(adjustPillarHeight, 100);
+    setTimeout(adjustPillarHeight, 1000);
+  }
 
   // 3. Draggable OS Window & Controls
   const win = document.getElementById('drag-window');
