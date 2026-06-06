@@ -472,6 +472,7 @@ footer {
     <div class="stamp">VIBE<br>CODER<br>2026</div>
     
     <div class="glitch-wrapper">
+      <canvas id="name-particles" style="position: absolute; inset: 0; pointer-events: none; width: 100%; height: 100%; z-index: 10;"></canvas>
       <h1 class="glitch-text" data-text="ANSIL">ANSIL</h1>
       <h1 class="glitch-text" data-text="MUHAMMED">MUHAMMED</h1>
     </div>
@@ -824,6 +825,132 @@ footer {
     }
   }
   setTimeout(typeWriter, 800);
+
+  // 5. Name Particle Canvas Effect
+  const canvas = document.getElementById('name-particles');
+  const wrapper = document.querySelector('.glitch-wrapper');
+  if (canvas && wrapper) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: null, y: null, active: false };
+
+    function resizeCanvas() {
+      const rect = wrapper.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 3;
+        this.vy = (Math.random() - 0.5) * 3 - 0.5;
+        this.size = Math.random() * 8 + 4;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.015 + 0.01;
+        this.shape = Math.floor(Math.random() * 3);
+        const colors = ['#FF0055', '#00EFFF', '#D4FF00', '#AEE1FF', '#FFBFE0', '#D2BFFF'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotSpeed = (Math.random() - 0.5) * 0.1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+        this.rotation += this.rotSpeed;
+        
+        if (mouse.active) {
+          const dx = this.x - mouse.x;
+          const dy = this.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 60) {
+            const force = (60 - dist) / 60;
+            this.vx += (dx / dist) * force * 0.4;
+            this.vy += (dy / dist) * force * 0.4;
+          }
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+
+        if (this.shape === 0) {
+          ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+          ctx.strokeStyle = '#0B0C10';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-this.size/2, -this.size/2, this.size, this.size);
+        } else if (this.shape === 1) {
+          ctx.beginPath();
+          ctx.arc(0, 0, this.size/2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#0B0C10';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(-this.size/2, 0);
+          ctx.lineTo(this.size/2, 0);
+          ctx.moveTo(0, -this.size/2);
+          ctx.lineTo(0, this.size/2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+    }
+
+    wrapper.addEventListener('mousemove', e => {
+      const rect = wrapper.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+
+      if (Math.random() < 0.7) {
+        particles.push(new Particle(mouse.x, mouse.y));
+      }
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      mouse.active = false;
+    });
+
+    function ambientSpawn() {
+      if (!mouse.active && Math.random() < 0.04) {
+        const x = Math.random() * (canvas.width / (window.devicePixelRatio || 1));
+        const y = Math.random() * (canvas.height / (window.devicePixelRatio || 1));
+        particles.push(new Particle(x, y));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ambientSpawn();
+      particles = particles.filter(p => {
+        p.update();
+        if (p.alpha > 0) {
+          p.draw();
+          return true;
+        }
+        return false;
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
 </script>
 </body>
 </html>
