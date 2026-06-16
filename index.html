@@ -101,9 +101,12 @@
       align-items: center;
       justify-content: center;
       padding: clamp(40px, 8vw, 80px) 20px;
-      gap: clamp(24px, 4vw, 48px);
+      gap: clamp(28px, 4.5vw, 56px);
       position: relative;
       z-index: 1;
+      /* Prevent pills from spreading too wide and overlapping */
+      max-width: 100%;
+      width: 100%;
     }
 
     /* ── FLUID PILL BUTTONS ── */
@@ -114,9 +117,9 @@
       gap: clamp(12px, 2vw, 24px);
       
       /* Fluid Width: grows massive on desktop, fits mobile */
-      width: clamp(300px, 75vw, 800px);
+      width: clamp(300px, 72vw, 760px);
       
-      /* Reverted to the initial "pill/oval" shape */
+      /* Pill shape */
       border-radius: 999px; 
       border: clamp(4px, 0.6vw, 6px) solid var(--ink);
       padding: clamp(20px, 3vw, 40px) clamp(30px, 5vw, 60px);
@@ -134,11 +137,16 @@
       box-shadow: clamp(8px, 1.5vw, 16px) clamp(8px, 1.5vw, 16px) 0 var(--ink);
       cursor: none;
       
+      /* Use custom property for rotation so animation can reference it */
+      --rot: 0deg;
+      transform: rotate(var(--rot));
+      
       transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
                   box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
                   filter 0.15s ease;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
       
       /* Initial staggered animation */
       opacity: 0;
@@ -160,16 +168,16 @@
     .purple { background: var(--purple); }
     .red    { background: var(--red); }
 
-    /* Subtle Chaotic Tilts */
-    .cta:nth-child(1) { transform: rotate(-2deg); animation-delay: 0.1s; }
-    .cta:nth-child(2) { transform: rotate(3deg);  animation-delay: 0.2s; }
-    .cta:nth-child(3) { transform: rotate(-1.5deg); animation-delay: 0.3s; }
-    .cta:nth-child(4) { transform: rotate(2deg);  animation-delay: 0.4s; }
-    .cta:nth-child(5) { transform: rotate(-3deg); animation-delay: 0.5s; }
+    /* Subtle Chaotic Tilts — stored in --rot so animation's `to` state preserves them */
+    .cta:nth-child(1) { --rot: -2deg;   animation-delay: 0.1s; z-index: 5; }
+    .cta:nth-child(2) { --rot:  3deg;   animation-delay: 0.2s; z-index: 4; }
+    .cta:nth-child(3) { --rot: -1.5deg; animation-delay: 0.3s; z-index: 3; }
+    .cta:nth-child(4) { --rot:  2deg;   animation-delay: 0.4s; z-index: 2; }
+    .cta:nth-child(5) { --rot: -3deg;   animation-delay: 0.5s; z-index: 1; }
 
     @keyframes pillIn {
-      from { opacity: 0; transform: translateY(40px) rotate(0deg); }
-      to   { opacity: 1; }
+      from { opacity: 0; transform: translateY(40px) rotate(var(--rot)); }
+      to   { opacity: 1; transform: rotate(var(--rot)); }
     }
 
     /* Interaction States */
@@ -177,7 +185,7 @@
       transform: rotate(0deg) translate(-6px, -8px) scale(1.02) !important;
       box-shadow: clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) 0 var(--ink);
       filter: brightness(1.08);
-      z-index: 10;
+      z-index: 10 !important;
     }
     
     .cta:active, 
@@ -186,6 +194,7 @@
       box-shadow: 2px 2px 0 var(--ink);
       filter: brightness(0.92);
       transition-duration: 0.05s;
+      z-index: 10 !important;
     }
 
     /* ── FOOTER ── */
