@@ -17,6 +17,7 @@
       --pink:   #f6b3d3;
       --orange: #ffcb8c;
       --purple: #c9b6ff;
+      --red:    #ff8a8a;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -157,12 +158,14 @@
     .pink   { background: var(--pink); }
     .orange { background: var(--orange); }
     .purple { background: var(--purple); }
+    .red    { background: var(--red); }
 
     /* Subtle Chaotic Tilts */
     .cta:nth-child(1) { transform: rotate(-2deg); animation-delay: 0.1s; }
     .cta:nth-child(2) { transform: rotate(3deg);  animation-delay: 0.2s; }
     .cta:nth-child(3) { transform: rotate(-1.5deg); animation-delay: 0.3s; }
     .cta:nth-child(4) { transform: rotate(2deg);  animation-delay: 0.4s; }
+    .cta:nth-child(5) { transform: rotate(-3deg); animation-delay: 0.5s; }
 
     @keyframes pillIn {
       from { opacity: 0; transform: translateY(40px) rotate(0deg); }
@@ -284,6 +287,11 @@
     <a href="https://www.linkedin.com/in/ansil-muhammed-n-s-882449377" target="_blank" rel="noopener noreferrer" class="cta purple" data-label="LinkedIn">
       <svg class="logo" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
       LinkedIn
+    </a>
+
+    <a href="https://gitlab.com/ClashLex" target="_blank" rel="noopener noreferrer" class="cta red" data-label="GitLab">
+      <svg class="logo" viewBox="0 0 24 24"><path d="M23.955 13.587l-1.342-4.135-2.664-8.189c-.135-.423-.73-.423-.867 0L16.418 9.45H7.582L4.919 1.263c-.137-.423-.733-.423-.868 0L1.387 9.452.045 13.587c-.121.38.016.797.326 1.026l11.63 8.442 11.629-8.442c.31-.229.447-.646.325-1.026z"/></svg>
+      GitLab
     </a>
   </main>
 
