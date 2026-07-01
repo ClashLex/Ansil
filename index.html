@@ -11,13 +11,13 @@
 
   <style>
     :root {
-      --ink:    #0a0a0a;
-      --bg:     #d7f34b;
-      --blue:   #a8ddf5;
-      --pink:   #f6b3d3;
-      --orange: #ffcb8c;
-      --purple: #c9b6ff;
-      --red:    #ff8a8a;
+      --ink:    #0B0C10;
+      --bg:     #FFFFFF;
+      --blue:   #E8EDF2;
+      --pink:   #F0E6EC;
+      --orange: #F2EDE6;
+      --purple: #ECEAF2;
+      --red:    #E8E6E6;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,8 +25,8 @@
     body {
       min-height: 100vh;
       background-color: var(--bg);
-      background-image: radial-gradient(var(--ink) 1.5px, transparent 1.5px);
-      background-size: 36px 36px;
+      background-image: radial-gradient(rgba(11,12,16,0.08) 1.5px, transparent 1.5px);
+      background-size: 32px 32px;
       font-family: 'Syne', sans-serif;
       cursor: none;
       overflow-x: hidden;
@@ -41,7 +41,7 @@
       inset: 0;
       pointer-events: none;
       background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
-      opacity: 0.08;
+      opacity: 0.04;
       z-index: 200;
     }
 
@@ -51,24 +51,26 @@
       width: 20px; height: 20px;
       background: var(--ink);
       border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 rgba(11,12,16,0.3);
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
       transition: width 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
                   height 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                  background 0.1s, border-radius 0.1s;
+                  background 0.15s, border-radius 0.15s;
     }
     #cursor.grow {
-      width: 56px; height: 56px;
-      background: var(--pink);
+      width: 50px; height: 50px;
+      background: var(--ink);
       border-radius: 50%;
       mix-blend-mode: difference;
+      box-shadow: none;
     }
 
     /* ── MARQUEE ── */
     .marquee-wrap {
       background: var(--ink);
-      border-bottom: 4px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
       overflow: hidden;
       padding: clamp(12px, 2vw, 24px) 0;
       flex-shrink: 0;
@@ -87,7 +89,7 @@
       letter-spacing: 0.08em;
       padding: 0 40px;
     }
-    .marquee-track span.sep { color: var(--pink); padding: 0 10px; }
+    .marquee-track span.sep { color: rgba(255,255,255,0.35); padding: 0 10px; }
     @keyframes marquee {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
@@ -121,7 +123,7 @@
       
       /* Pill shape */
       border-radius: 999px; 
-      border: clamp(4px, 0.6vw, 6px) solid var(--ink);
+      border: clamp(3px, 0.5vw, 4px) solid var(--ink);
       padding: clamp(20px, 3vw, 40px) clamp(30px, 5vw, 60px);
       
       font-family: 'Syne', sans-serif;
@@ -134,7 +136,7 @@
       text-decoration: none;
       
       /* Fluid Graphic Shadow */
-      box-shadow: clamp(8px, 1.5vw, 16px) clamp(8px, 1.5vw, 16px) 0 var(--ink);
+      box-shadow: clamp(6px, 1.2vw, 12px) clamp(6px, 1.2vw, 12px) 0 var(--ink);
       cursor: none;
       
       /* Use custom property for rotation so animation can reference it */
@@ -182,17 +184,17 @@
 
     /* Interaction States */
     .cta:hover {
-      transform: rotate(0deg) translate(-6px, -8px) scale(1.02) !important;
-      box-shadow: clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) 0 var(--ink);
-      filter: brightness(1.08);
+      transform: rotate(0deg) translate(-4px, -6px) scale(1.02) !important;
+      box-shadow: clamp(10px, 1.8vw, 18px) clamp(10px, 1.8vw, 18px) 0 var(--ink);
+      filter: brightness(0.98);
       z-index: 10 !important;
     }
     
     .cta:active, 
     .cta.is-pressed {
-      transform: rotate(0deg) translate(8px, 10px) scale(0.98) !important;
+      transform: rotate(0deg) translate(6px, 8px) scale(0.98) !important;
       box-shadow: 2px 2px 0 var(--ink);
-      filter: brightness(0.92);
+      filter: brightness(0.95);
       transition-duration: 0.05s;
       z-index: 10 !important;
     }
@@ -200,7 +202,7 @@
     /* ── FOOTER ── */
     footer {
       background: var(--ink);
-      border-top: 4px solid var(--ink);
+      border-top: 3px solid var(--ink);
       padding: clamp(16px, 2vw, 24px) 20px;
       display: flex;
       justify-content: center;
@@ -220,7 +222,7 @@
     }
 
     footer p span {
-      color: var(--pink);
+      color: rgba(255,255,255,0.4);
     }
 
     /* ── TOAST ── */
@@ -239,8 +241,8 @@
     .toast {
       background: var(--ink);
       color: var(--bg);
-      border: 3px solid var(--ink);
-      box-shadow: 6px 6px 0 rgba(0,0,0,0.4);
+      border: 2px solid var(--ink);
+      box-shadow: 4px 4px 0 rgba(11,12,16,0.2);
       padding: 12px 24px;
       font-family: 'Syne Mono', monospace;
       font-size: clamp(12px, 2vw, 16px);
