@@ -11,13 +11,17 @@
 
   <style>
     :root {
-      --ink:    #0B0C10;
-      --bg:     #FFFFFF;
-      --blue:   #E8EDF2;
-      --pink:   #F0E6EC;
-      --orange: #F2EDE6;
-      --purple: #ECEAF2;
-      --red:    #E8E6E6;
+      --ink:    #1B1B2F;
+      --bg:     #F9F9F6;
+      --blue:   #EEF2FF;
+      --pink:   #FFF1F2;
+      --orange: #FFF7ED;
+      --purple: #F3F0FF;
+      --red:    #FFF1F2;
+      --teal:   #2DD4BF;
+      --coral:  #F06560;
+      --indigo: #6366F1;
+      --amber:  #F59E0B;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,8 +29,8 @@
     body {
       min-height: 100vh;
       background-color: var(--bg);
-      background-image: radial-gradient(rgba(11,12,16,0.08) 1.5px, transparent 1.5px);
-      background-size: 32px 32px;
+      background-image: radial-gradient(rgba(99,102,241,0.07) 1.5px, transparent 1.5px);
+      background-size: 36px 36px;
       font-family: 'Syne', sans-serif;
       cursor: none;
       overflow-x: hidden;
@@ -41,17 +45,17 @@
       inset: 0;
       pointer-events: none;
       background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
-      opacity: 0.04;
+      opacity: 0.05;
       z-index: 200;
     }
 
     /* ── CUSTOM CURSOR ── */
     #cursor {
       position: fixed;
-      width: 20px; height: 20px;
-      background: var(--ink);
+      width: 22px; height: 22px;
+      background: var(--indigo);
       border: 2px solid var(--ink);
-      box-shadow: 3px 3px 0 rgba(11,12,16,0.3);
+      box-shadow: 3px 3px 0 var(--ink);
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
@@ -60,8 +64,8 @@
                   background 0.15s, border-radius 0.15s;
     }
     #cursor.grow {
-      width: 50px; height: 50px;
-      background: var(--ink);
+      width: 56px; height: 56px;
+      background: var(--coral);
       border-radius: 50%;
       mix-blend-mode: difference;
       box-shadow: none;
@@ -85,11 +89,11 @@
     .marquee-track span {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(24px, 4vw, 40px);
-      color: var(--bg);
+      color: var(--teal);
       letter-spacing: 0.08em;
       padding: 0 40px;
     }
-    .marquee-track span.sep { color: rgba(255,255,255,0.35); padding: 0 10px; }
+    .marquee-track span.sep { color: var(--coral); padding: 0 10px; }
     @keyframes marquee {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
@@ -184,9 +188,9 @@
 
     /* Interaction States */
     .cta:hover {
-      transform: rotate(0deg) translate(-4px, -6px) scale(1.02) !important;
+      transform: rotate(0deg) translate(-5px, -7px) scale(1.02) !important;
       box-shadow: clamp(10px, 1.8vw, 18px) clamp(10px, 1.8vw, 18px) 0 var(--ink);
-      filter: brightness(0.98);
+      filter: brightness(1.05);
       z-index: 10 !important;
     }
     
@@ -194,7 +198,7 @@
     .cta.is-pressed {
       transform: rotate(0deg) translate(6px, 8px) scale(0.98) !important;
       box-shadow: 2px 2px 0 var(--ink);
-      filter: brightness(0.95);
+      filter: brightness(0.94);
       transition-duration: 0.05s;
       z-index: 10 !important;
     }
@@ -202,7 +206,7 @@
     /* ── FOOTER ── */
     footer {
       background: var(--ink);
-      border-top: 3px solid var(--ink);
+      border-top: 4px solid var(--coral);
       padding: clamp(16px, 2vw, 24px) 20px;
       display: flex;
       justify-content: center;
@@ -216,13 +220,13 @@
       font-family: 'Syne Mono', monospace;
       font-size: clamp(12px, 1.5vw, 16px);
       letter-spacing: 0.1em;
-      color: var(--bg);
+      color: var(--teal);
       text-transform: uppercase;
       text-align: center;
     }
 
     footer p span {
-      color: rgba(255,255,255,0.4);
+      color: var(--coral);
     }
 
     /* ── TOAST ── */
@@ -240,9 +244,9 @@
     }
     .toast {
       background: var(--ink);
-      color: var(--bg);
+      color: var(--teal);
       border: 2px solid var(--ink);
-      box-shadow: 4px 4px 0 rgba(11,12,16,0.2);
+      box-shadow: 4px 4px 0 var(--indigo);
       padding: 12px 24px;
       font-family: 'Syne Mono', monospace;
       font-size: clamp(12px, 2vw, 16px);
