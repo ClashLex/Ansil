@@ -35,9 +35,8 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: (optional) Setup Node
+        if: hashFiles('package.json') != ''
         uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
 
       - name: Install & build if needed, and prepare 'public' folder
         run: |
@@ -69,8 +68,12 @@ jobs:
           else
             echo "no build output folder found — creating 'public' and copying common static files"
             mkdir -p public
-            for f in index.html 404.html; do [ -f "$f" ] && cp "$f" public/ || true; done
-            for d in assets static css js images; do [ -d "$d" ] && cp -R "$d" public/ || true; done
+            # Copy all HTML files, JS, and common asset directories
+            cp *.html public/ 2>/dev/null || true
+            cp *.js public/ 2>/dev/null || true
+            cp *.css public/ 2>/dev/null || true
+            cp *.png *.jpg *.jpeg *.gif *.svg *.ico *.webp public/ 2>/dev/null || true
+            for d in assets static css js images fonts; do [ -d "$d" ] && cp -R "$d" public/ || true; done
           fi
 
       - name: Upload artifact
