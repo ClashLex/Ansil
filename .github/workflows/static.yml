@@ -30,14 +30,56 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - name: (optional) Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+
+      - name: Install & build if needed, and prepare 'public' folder
+        run: |
+          set -e
+          # If a package.json exists, attempt to install and build
+          if [ -f package.json ]; then
+            echo "package.json found — installing dependencies and attempting build"
+            npm ci || true
+            npm run build || true
+          else
+            echo "no package.json — skipping JS build"
+          fi
+
+          # If a typical output folder already exists, normalize it to 'public'
+          if [ -d public ]; then
+            echo "'public' directory already present — will deploy it"
+          elif [ -d dist ]; then
+            echo "found 'dist' — renaming to 'public'"
+            mv dist public
+          elif [ -d build ]; then
+            echo "found 'build' — renaming to 'public'"
+            mv build public
+          elif [ -d out ]; then
+            echo "found 'out' — renaming to 'public'"
+            mv out public
+          elif [ -d _site ]; then
+            echo "found '_site' — renaming to 'public'"
+            mv _site public
+          else
+            echo "no build output folder found — creating 'public' and copying common static files"
+            mkdir -p public
+            for f in index.html 404.html; do [ -f "$f" ] && cp "$f" public/ || true; done
+            for d in assets static css js images; do [ -d "$d" ] && cp -R "$d" public/ || true; done
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload prepared 'public' folder only — safer than uploading entire repo
+          path: 'public'
           overwrite: true
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
