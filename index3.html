@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ansil Muhammed N S — Links</title>
   <meta name="description" content="Connect with Ansil Muhammed N S — Engineer, Builder, Open Source advocate. GitHub, Twitter, Instagram, LinkedIn, GitLab." />
+  <meta name="color-scheme" content="light" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +17,7 @@
        Instrument Serif + Inter, fully white theme
        ══════════════════════════════════════════════════════════════ */
     :root {
+      color-scheme: light;
       --white:    #FFFFFF;
       --offwhite: #FAFAFA;
       --smoke:    #F5F5F5;
@@ -909,13 +911,16 @@
         }
       }
 
-      // Food
+      // Food (Diamond shape)
       ctx.fillStyle = '#1A1A1A';
       const fx = food.x * cellSize + cellSize / 2;
       const fy = food.y * cellSize + cellSize / 2;
-      const fr = cellSize * 0.32;
+      const fr = cellSize * 0.35;
       ctx.beginPath();
-      ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+      ctx.moveTo(fx, fy - fr);
+      ctx.lineTo(fx + fr, fy);
+      ctx.lineTo(fx, fy + fr);
+      ctx.lineTo(fx - fr, fy);
       ctx.fill();
 
       // Snake
@@ -984,6 +989,8 @@
     }
 
     function startGame() {
+      if (running) return;
+      clearInterval(gameLoop);
       overlay.classList.add('hidden');
       init();
       running = true;
