@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> ANSIL MUHAMMED N S </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,800;1,800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   ANSIL MUHAMMED N S — SUPREME OVERDRIVE v5.0
+   Maximalist Collage × Pixel Brutalism × Glitch
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  /* White Theme — Warm Base */
+  --bg-lime:    #F9F9F6; /* Warm Off-White */
+  --p-blue:     #EEF2FF; /* Indigo Wash */
+  --p-pink:     #FFF1F2; /* Rose Wash */
+  --p-org:      #FFF7ED; /* Amber Wash */
+  --p-purp:     #F3F0FF; /* Violet Wash */
+
+  /* Accent Palette */
+  --black:      #1B1B2F; /* Deep Indigo-Black */
+  --white:      #FFFFFF;
+  --magenta:    #F06560; /* Warm Coral */
+  --cyan:       #6366F1; /* Electric Indigo */
+  --tape:       #E5E5EB;
+
+  /* Extra Accents */
+  --teal:       #2DD4BF;
+  --amber:      #F59E0B;
+
+  /* Typography */
+  --ff-disp:    'Anton', sans-serif;
+  --ff-mono:    'Space Mono', monospace;
+  --ff-serif:   'Playfair Display', serif;
+
+  /* Borders & Shadows */
+  --b-heavy:    3px solid var(--black);
+  --b-thin:     1.5px solid rgba(27,27,47,0.2);
+  
+  --sh-hard:    6px 6px 0 var(--black);
+  --sh-hard-lg: 12px 12px 0 var(--black);
+  --sh-mag:     6px 6px 0 var(--magenta), 12px 12px 0 var(--black);
+  --sh-cyan:    6px 6px 0 var(--cyan), 12px 12px 0 var(--black);
+}
+
+/* FIX: Globally remove the default semi-transparent blue flash highlight on mobile taps */
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* FIX: Suppress default active focus states and selection flashes across clickable/interactable layout blocks */
+a, button, input, textarea, .interactable, .brutal-link, .sticker, .pixel-pill, .bento-card {
+  -webkit-tap-highlight-color: transparent !important;
+  outline: none !important;
+}
+
+body.hide-native-cursor, body.hide-native-cursor * { cursor: none !important; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-lime);
+  color: var(--black);
+  font-family: var(--ff-mono);
+  overflow-x: hidden;
+  line-height: 1.5;
+  /* Subtle warm dot grid */
+  background-image: radial-gradient(rgba(99,102,241,0.07) 1.5px, transparent 1.5px);
+  background-size: 36px 36px;
+}
+
+/* ── OVERLAYS ── */
+.scanlines {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(27,27,47,0.02) 50%, rgba(27,27,47,0.02));
+  background-size: 100% 4px;
+}
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.05;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor {
+  position: fixed; top: 0; left: 0; opacity: 0;
+  width: 22px; height: 22px;
+  background: var(--cyan);
+  border: 2px solid var(--black);
+  box-shadow: 3px 3px 0 var(--black);
+  transform: translate(-50%, -50%);
+  pointer-events: none; z-index: 10000;
+  transition: width 0.15s, height 0.15s, background 0.15s, border-radius 0.15s;
+}
+#cursor.hov {
+  width: 56px; height: 56px;
+  background: var(--magenta);
+  border-radius: 50%;
+  mix-blend-mode: difference;
+  box-shadow: none;
+  border-color: var(--white);
+}
+@media (pointer: coarse) { #cursor { display: none !important; } * { cursor: auto !important; } a, button, .interactable { cursor: pointer !important; } }
+
+/* ── PARALLAX WIREFRAME PILLAR ── */
+.wireframe-pillar {
+  position: fixed; top: -10%; left: 3%;
+  width: 130px; height: 300vh;
+  background-image: 
+      repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(99,102,241,0.06) 18px, rgba(99,102,241,0.06) 20px),
+      repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(99,102,241,0.06) 48px, rgba(99,102,241,0.06) 50px);
+  background-color: var(--bg-lime);
+  border: 2px solid rgba(99,102,241,0.12);
+  box-shadow: none;
+  z-index: 0; opacity: 0.7; pointer-events: none;
+  /* FIX: Use fixed pixel values (px) for the chamfered corners of the clip-path. Percentages (like 5%) scale with element height, causing massive tapers on tall/dynamic columns. */
+  clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px), 0 15px);
+}
+@media (max-width: 1024px) { .wireframe-pillar { display: none; } }
+
+/* ── DUCT TAPE COLLAGE ELEMENT ── */
+.tape {
+  position: absolute;
+  background: var(--tape);
+  height: 32px;
+  border: 2px solid rgba(27,27,47,0.3);
+  box-shadow: 2px 2px 0px rgba(27,27,47,0.12);
+  z-index: 10;
+  opacity: 0.85;
+}
+.tape::after {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(27,27,47,0.05) 4px, rgba(27,27,47,0.05) 6px);
+}
+
+/* ── LAYOUT ── */
+.container {
+  position: relative; z-index: 2;
+  max-width: 1400px; margin: 0 auto;
+  padding: 4rem 2rem;
+  padding-left: max(2rem, 12vw);
+  width: 100%;
+}
+@media (max-width: 1024px) { .container { padding-left: 2rem; } }
+@media (max-width: 768px) { .container { padding: 2rem 1rem; } }
+@media (max-width: 480px) { .container { padding: 1.5rem 0.8rem; } }
+
+/* ════════════════════════════════════════════════════════════════
+   HERO & GLITCH
+   ════════════════════════════════════════════════════════════════ */
+.hero { position: relative; padding: 6rem 0 4rem; }
+@media (max-width: 768px) { .hero { padding: 3rem 0 2rem; } }
+
+.glitch-wrapper { position: relative; display: inline-block; transform: rotate(-2deg); margin-bottom: 2rem; max-width: 100%; }
+.glitch-text {
+  font-family: var(--ff-disp);
+  font-size: clamp(3rem, 13vw, 12rem);
+  line-height: 0.85;
+  color: var(--black);
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 6px 6px 0 var(--cyan), 12px 12px 0 var(--magenta);
+  position: relative;
+  word-break: break-word;
+}
+.glitch-text::before, .glitch-text::after {
+  content: attr(data-text); position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%; background: transparent;
+}
+.glitch-text::before {
+  left: 4px; text-shadow: -3px 0 var(--magenta); color: var(--cyan);
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  animation: glitch-1 2s infinite linear alternate-reverse;
+}
+.glitch-text::after {
+  left: -4px; text-shadow: -3px 0 var(--cyan); color: var(--magenta);
+  clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+  animation: glitch-2 3s infinite linear alternate-reverse;
+}
+@keyframes glitch-1 {
+  0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); }
+  20% { clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%); }
+  40% { clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%); }
+  60% { clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%); }
+  80% { clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%); }
+  100% { clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%); }
+}
+@keyframes glitch-2 {
+  0% { clip-path: polygon(0 25%, 100% 25%, 100% 30%, 0 30%); }
+  20% { clip-path: polygon(0 3%, 100% 3%, 100% 3%, 0 3%); }
+  40% { clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%); }
+  60% { clip-path: polygon(0 20%, 100% 20%, 100% 20%, 0 20%); }
+  80% { clip-path: polygon(0 40%, 100% 40%, 100% 43%, 0 43%); }
+  100% { clip-path: polygon(0 50%, 100% 50%, 100% 59%, 0 59%); }
+}
+
+.hero-box {
+  background: var(--white);
+  border: var(--b-heavy);
+  padding: 24px;
+  box-shadow: var(--sh-hard);
+  max-width: 600px;
+  width: 100%;
+  transform: rotate(1deg);
+  position: relative;
+}
+@media (max-width: 768px) {
+  .hero-box { transform: none; max-width: 100%; padding: 16px; box-shadow: 5px 5px 0 var(--black); }
+}
+.hero-box .serif-text {
+  font-family: var(--ff-serif);
+  font-size: clamp(1rem, 2.5vw, 1.4rem); line-height: 1.4;
+  font-style: italic; font-weight: 800;
+}
+
+/* Rotating Stamp */
+.stamp {
+  position: absolute; top: 10%; right: 5%;
+  width: 135px; height: 135px;
+  border: var(--b-heavy); border-radius: 50%;
+  background: var(--p-pink);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-family: var(--ff-disp); font-size: 1.15rem; line-height: 1.1;
+  box-shadow: var(--sh-hard);
+  animation: spin 15s linear infinite;
+  z-index: 5;
+}
+@media (max-width: 600px) { .stamp { display: none; } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Scattered Stickers */
+.scatter-box { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 3rem; }
+.sticker {
+  font-family: var(--ff-disp);
+  font-size: clamp(1.2rem, 3vw, 2.5rem);
+  background: var(--white); border: var(--b-heavy);
+  padding: 8px 16px; box-shadow: var(--sh-hard);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-block;
+}
+.sticker:hover { transform: scale(1.08) rotate(0deg) !important; box-shadow: var(--sh-hard-lg); z-index: 10; }
+.s1 { background: var(--p-blue); transform: rotate(-4deg); }
+.s2 { background: var(--p-org); transform: rotate(3deg); }
+.s3 { background: var(--black); color: var(--teal); transform: rotate(-2deg); }
+@media (max-width: 480px) {
+  .sticker { transform: none !important; box-shadow: 4px 4px 0 var(--black); }
+  .scatter-box { gap: 10px; margin-top: 2rem; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   THE IMAGE REFERENCE: PIXEL PILLS
+   ════════════════════════════════════════════════════════════════ */
+.pixel-stack {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2rem; margin: 6rem 0; position: relative;
+}
+@media (max-width: 768px) { .pixel-stack { margin: 3rem 0; gap: 1.2rem; } }
+.pixel-pill {
+  width: 100%; max-width: 650px;
+  padding: 1.5rem 2rem;
+  border-radius: 60px;
+  border: 3px solid var(--black);
+  box-shadow: 8px 8px 0 var(--black);
+  text-align: center;
+  font-family: var(--ff-mono); font-weight: 700;
+  font-size: clamp(0.9rem, 3.5vw, 2rem);
+  text-transform: uppercase;
+  color: var(--black);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+@media (max-width: 480px) {
+  .pixel-pill { padding: 1rem 1.2rem; border-radius: 40px; border-width: 3px; box-shadow: 5px 5px 0 var(--black); }
+}
+.pixel-pill:hover { transform: translate(-5px, -5px); box-shadow: 13px 13px 0 var(--black); z-index: 10; }
+
+.pill-1 { background: var(--p-blue); transform: rotate(-1deg); }
+.pill-2 { background: var(--p-pink); transform: rotate(1deg); }
+.pill-3 { background: var(--p-org);  transform: rotate(-0.5deg); }
+.pill-4 { background: var(--p-purp); transform: rotate(1.5deg); }
+
+/* ════════════════════════════════════════════════════════════════
+   DOUBLE MARQUEE
+   ════════════════════════════════════════════════════════════════ */
+.marquee-container {
+  width: 100%; overflow: hidden;
+  background: var(--black); color: var(--teal);
+  border-top: var(--b-heavy); border-bottom: var(--b-heavy);
+  padding: 15px 0; position: relative; z-index: 50;
+  transform: rotate(2deg) scale(1.05); margin: 4rem 0;
+  box-shadow: 0 12px 0 var(--cyan);
+}
+@media (max-width: 768px) {
+  .marquee-container { transform: rotate(1deg) scale(1.02); margin: 2.5rem 0; }
+  .marquee-container.rev { transform: rotate(-1deg) scale(1.02); }
+}
+.marquee-container.rev {
+  transform: rotate(-2deg) scale(1.05);
+  background: var(--magenta); color: var(--white);
+  box-shadow: 0 12px 0 var(--black);
+  margin-top: -2rem;
+}
+.marquee-inner { display: inline-block; white-space: nowrap; font-family: var(--ff-disp); font-size: clamp(1.6rem, 4vw, 2.8rem); letter-spacing: 2px; }
+.marquee-inner.fwd { animation: mq 16s linear infinite; }
+.marquee-inner.bck { animation: mq 18s linear infinite reverse; }
+@keyframes mq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.marquee-inner span { margin: 0 30px; }
+
+/* ════════════════════════════════════════════════════════════════
+   DRAGGABLE OS WINDOW (Terminal + Artifacts)
+   ════════════════════════════════════════════════════════════════ */
+.section-title {
+  font-family: var(--ff-disp); font-size: clamp(2rem, 6vw, 5.5rem);
+  background: var(--white); border: var(--b-heavy);
+  display: inline-block; padding: 0 20px;
+  box-shadow: var(--sh-hard); transform: skew(-3deg);
+  margin-bottom: 3rem; position: relative;
+}
+@media (max-width: 480px) {
+  .section-title { transform: none; padding: 0 12px; box-shadow: 4px 4px 0 var(--black); margin-bottom: 2rem; }
+}
+
+.os-window {
+  background: var(--white); border: var(--b-heavy);
+  box-shadow: var(--sh-mag); max-width: 1000px;
+  width: 100%;
+  margin: 0 auto 6rem; position: relative;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .os-window { box-shadow: 5px 5px 0 var(--magenta), 10px 10px 0 var(--black); margin-bottom: 4rem; }
+}
+.os-header {
+  background: var(--cyan); border-bottom: var(--b-heavy);
+  padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--ff-mono); font-weight: 700; font-size: clamp(0.7rem, 2vw, 1.1rem);
+  color: var(--white);
+  flex-wrap: wrap; gap: 8px;
+}
+.os-header .controls { display: flex; gap: 10px; }
+.os-header .btn { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.25); border-radius: 50%; flex-shrink: 0; }
+.os-header .btn:nth-child(1) { background: var(--magenta); }
+.os-header .btn:nth-child(2) { background: var(--amber); }
+.os-header .btn:nth-child(3) { background: var(--teal); }
+
+.os-body { display: flex; flex-direction: column; }
+
+/* Terminal Intro inside OS */
+.os-terminal {
+  background: var(--black); color: var(--teal);
+  padding: 20px; font-family: var(--ff-mono); font-size: clamp(0.75rem, 1.8vw, 1rem);
+  border-bottom: var(--b-heavy); line-height: 1.6;
+  word-break: break-word;
+}
+.typewriter::after { content: '█'; animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Projects List inside OS */
+.proj-row {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 20px; padding: 30px; border-bottom: var(--b-thin);
+  align-items: start; transition: background 0.2s;
+}
+.proj-row:last-child { border-bottom: none; }
+.proj-row:hover { background: rgba(0,0,0,0.04); }
+
+.proj-num { font-family: var(--ff-disp); font-size: 3.5rem; color: var(--p-pink); -webkit-text-stroke: 2px var(--black); line-height: 1; }
+.proj-info h3 { font-family: var(--ff-disp); font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; }
+.proj-info p { font-family: var(--ff-serif); font-size: clamp(0.95rem, 2vw, 1.2rem); font-weight: 800; margin-bottom: 15px; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.ptag { background: var(--black); color: var(--teal); padding: 4px 10px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.brutal-link {
+  background: var(--white); color: var(--black);
+  border: var(--b-heavy); padding: 10px 20px;
+  font-family: var(--ff-mono); font-weight: 700;
+  text-decoration: none; display: inline-block;
+  box-shadow: 4px 4px 0 var(--black); transition: all 0.2s; text-align: center;
+  white-space: nowrap;
+}
+.brutal-link:hover { background: var(--cyan); color: var(--white); transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--black); }
+
+@media (max-width: 768px) {
+  .proj-row { grid-template-columns: 1fr; gap: 12px; padding: 20px; }
+  .proj-num { display: none; }
+  .brutal-link { align-self: flex-start; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BENTO GRID (Experience & Roles)
+   ════════════════════════════════════════════════════════════════ */
+.bento-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem; margin-bottom: 6rem;
+}
+@media (max-width: 640px) {
+  .bento-grid { grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 4rem; }
+}
+.bento-card {
+  background: var(--white); border: var(--b-heavy); box-shadow: var(--sh-hard);
+  padding: 2.5rem; position: relative; transition: transform 0.2s, box-shadow 0.2s;
+  overflow: visible;
+}
+.bento-card:hover { transform: translate(-5px, -5px) rotate(1deg); box-shadow: var(--sh-hard-lg); z-index: 5; }
+.bento-card:nth-child(1) { background: var(--p-org); }
+.bento-card:nth-child(2) { background: var(--p-pink); }
+.bento-card:nth-child(3) { background: var(--p-blue); }
+
+.bento-badge {
+  position: absolute; top: -20px; right: -10px;
+  background: var(--black); color: var(--teal);
+  border: var(--b-heavy); width: 55px; height: 55px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-disp); font-size: 2rem;
+  transform: rotate(15deg); box-shadow: 4px 4px 0 var(--magenta);
+}
+
+.bento-role { font-family: var(--ff-disp); font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.1; margin-bottom: 0.5rem; text-transform: uppercase; }
+.bento-org { font-family: var(--ff-serif); font-weight: 800; font-style: italic; font-size: clamp(0.9rem, 2vw, 1.1rem); margin-bottom: 1rem; border-bottom: var(--b-thin); padding-bottom: 10px; }
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════════════════════════════ */
+footer {
+  background: var(--black); color: var(--white);
+  border-top: 6px solid var(--magenta); padding: 8rem 2rem 4rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+@media (max-width: 768px) { footer { padding: 5rem 1rem 3rem; } }
+
+.footer-contact {
+  font-family: var(--ff-disp); font-size: clamp(1.8rem, 6vw, 7.5rem);
+  color: var(--black); background: var(--teal);
+  border: var(--b-heavy); padding: 10px 30px;
+  text-decoration: none; display: inline-block;
+  box-shadow: 12px 12px 0 var(--cyan); transform: rotate(-2deg);
+  transition: all 0.2s; letter-spacing: 0.03em;
+  word-break: break-word; max-width: 100%;
+}
+@media (max-width: 600px) {
+  .footer-contact { transform: none; box-shadow: 6px 6px 0 var(--cyan); padding: 10px 16px; }
+}
+.footer-contact:hover { transform: translate(-5px,-5px) rotate(0deg); box-shadow: 17px 17px 0 var(--magenta); }
+
+.socials { margin-top: 4rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; padding: 0 1rem; }
+.socials a {
+  font-family: var(--ff-mono); font-weight: 700; font-size: 0.95rem;
+  color: var(--black); background: var(--white);
+  border: 2px solid rgba(255,255,255,0.25); padding: 10px 18px;
+  text-decoration: none; box-shadow: 4px 4px 0 var(--magenta); transition: transform 0.15s, box-shadow 0.15s;
+}
+.socials a:hover { transform: translate(-3px,-3px); box-shadow: 7px 7px 0 var(--cyan); }
+.socials a.chelsea { background: #034694; color: var(--white); border-color: #034694; }
+
+.footer-btm { margin-top: 5rem; font-family: var(--ff-mono); font-size: 0.75rem; opacity: 0.5; font-weight: 700; word-break: break-word; padding: 0 1rem; }
+</style>
+</head>
+<body>
+
+<!-- Overlays -->
+<div class="scanlines"></div>
+<div class="noise"></div>
+<div id="cursor"></div>
+
+<!-- Parallax Pillar -->
+<div class="wireframe-pillar" id="pillar"></div>
+
+<div class="container">
+  
+  <!-- HERO / GLITCH & COLLAGE -->
+  <header class="hero interactable">
+    <div class="tape" style="top:-15px; left:10%; width:150px; transform:rotate(-4deg);"></div>
+    <div class="stamp">VIBE<br>CODER<br>2026</div>
+    
+    <div class="glitch-wrapper">
+      <canvas id="name-particles" style="position: absolute; inset: 0; pointer-events: none; width: 100%; height: 100%; z-index: 10;"></canvas>
+      <h1 class="glitch-text" data-text="ANSIL">ANSIL</h1>
+      <h1 class="glitch-text" data-text="MUHAMMED">MUHAMMED</h1>
+    </div>
+    
+    <div class="hero-box">
+      <div class="tape" style="bottom:-15px; right:-20px; width:90px; background:var(--magenta); transform:rotate(12deg);"></div>
+      <p class="serif-text">"First-year Computer Science student passionate about AI integrations and hardware. Vibe coder, open-source contributor, and builder of real-world fault-tolerant systems."</p>
+      <div style="margin-top: 15px; font-weight: 700; border-top: var(--b-thin); padding-top: 10px;">B.Tech CSE @ KMEA // Kerala, India</div>
+    </div>
+
+    <div class="scatter-box interactable">
+      <div class="sticker s1">BUILDING</div>
+      <div class="sticker s2">WITH AI</div>
+      <div class="sticker s3">SHIPPING FULL STACK</div>
+    </div>
+  </header>
+
+  <!-- IMAGE REFERENCE: PASTEL PIXEL PILLS -->
+  <section class="pixel-stack interactable">
+    <div class="tape" style="top: -20px; left: 30%; width: 120px; transform: rotate(-7deg); background: var(--tape); z-index: 20;"></div>
+    <div class="tape" style="bottom: 80px; right: 25%; width: 100px; transform: rotate(15deg); background: var(--cyan); z-index: 20;"></div>
+    
+    <div class="pixel-pill pill-1">✦ JAVASCRIPT / TYPESCRIPT</div>
+    <div class="pixel-pill pill-2">✦ PYTHON / AI AGENTS</div>
+    <div class="pixel-pill pill-3">✦ REACT / NEXT.JS / SUPABASE</div>
+    <div class="pixel-pill pill-4">✦ LINUX / BASH / IOT</div>
+  </section>
+
+</div>
+
+<!-- DOUBLE MARQUEE -->
+<div class="marquee-container interactable">
+  <div class="marquee-inner fwd">
+    <span>VIBE CODING IS A SUPERPOWER</span><span class="dot">■</span>
+    <span>PROMPT ENGINEERING</span><span class="dot">■</span>
+    <span>MACHINE LEARNING</span><span class="dot">■</span>
+    <span>HARDWARE & IOT</span><span class="dot">■</span>
+    <span>OPEN SOURCE</span><span class="dot">■</span>
+    <span>VIBE CODING IS A SUPERPOWER</span><span class="dot">■</span>
+    <span>PROMPT ENGINEERING</span><span class="dot">■</span>
+    <span>MACHINE LEARNING</span><span class="dot">■</span>
+    <span>HARDWARE & IOT</span><span class="dot">■</span>
+    <span>OPEN SOURCE</span><span class="dot">■</span>
+  </div>
+</div>
+<div class="marquee-container rev interactable">
+  <div class="marquee-inner bck">
+    <span>SHIPPING FROM TERMINAL</span><span class="dot">■</span>
+    <span>CHELSEA FC SUPPORTER</span><span class="dot">■</span>
+    <span>AI INTEGRATION</span><span class="dot">■</span>
+    <span>SHIPPING FROM TERMINAL</span><span class="dot">■</span>
+    <span>CHELSEA FC SUPPORTER</span><span class="dot">■</span>
+    <span>AI INTEGRATION</span><span class="dot">■</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- OS WINDOW: TERMINAL + PROJECTS -->
+  <section style="margin-bottom: clamp(3rem, 8vw, 8rem);">
+    <div style="position:relative;display:inline-block;margin-bottom: 1rem;">
+      <div class="tape" style="top:-10px;left:-20px;transform:rotate(-5deg);background:var(--p-blue);width:110px;"></div>
+      <h2 class="section-title interactable">EXECUTABLES</h2>
+    </div>
+    
+    <div class="os-window interactable" id="drag-window">
+      <div class="os-header" id="drag-handle">
+        <span>C:\SYS\ARTIFACTS.EXE</span>
+        <span style="background:rgba(255,255,255,0.2);color:var(--white);padding:2px 10px;font-size:0.75rem;letter-spacing:0.05em;">[DRAG ME]</span>
+        <div class="controls"><div class="btn"></div><div class="btn"></div><div class="btn"></div></div>
+      </div>
+      
+      <div class="os-body">
+        <div class="os-terminal">
+          > INITIALIZING SUMMARY SEQUENCE...<br>
+          <span class="typewriter" id="typewriter-text"></span>
+        </div>
+        
+        <div class="proj-row">
+          <div class="proj-num">01</div>
+          <div class="proj-info">
+            <h3>AquaSense</h3>
+            <p>ML-Based Fault-Tolerant Safety Monitor. Contributed anomaly detection and fallback strategies for unreliable sensor readings in a real-time water quality system.</p>
+            <div class="proj-tags"><span class="ptag">IoT</span><span class="ptag">Machine Learning</span><span class="ptag">Academic</span></div>
+          </div>
+          <a href="https://aqua-sense-builder--ansilmuhammed91.replit.app" target="_blank" class="brutal-link">SOURCE ↗</a>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">02</div>
+          <div class="proj-info">
+            <h3>ink-blog</h3>
+            <p>Open Source UI Contribution. Fork of a Next.js and Supabase project. Added post card enhancements, reading-time display, and bookmarking. Shipped PR independently.</p>
+            <div class="proj-tags"><span class="ptag">Next.js</span><span class="ptag">Supabase</span><span class="ptag">Open Source</span></div>
+          </div>
+          <span class="brutal-link" style="background:var(--tape);color:var(--black);cursor:not-allowed;">MERGED</span>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">03</div>
+          <div class="proj-info">
+            <h3>REIATSU</h3>
+            <p>Vibe coded a real-time, gesture-controlled BLEACH spiritual-pressure visualizer.</p>
+            <div class="proj-tags"><span class="ptag">Vibe Code</span><span class="ptag">Web API</span></div>
+          </div>
+          <a href="https://clashlex.github.io/REIATSU/" target="_blank" class="brutal-link">EXECUTE ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO EXPERIENCE GRID -->
+  <section>
+    <div style="position:relative;display:inline-block;">
+      <div class="tape" style="top:-10px;left:-20px;transform:rotate(5deg);background:var(--p-pink);width:130px;"></div>
+      <h2 class="section-title interactable" style="background:var(--black);color:var(--teal);box-shadow:6px 6px 0 var(--cyan);">COMMUNITY_LOG</h2>
+    </div>
+    
+    <div class="bento-grid interactable">
+      <div class="bento-card">
+        <div class="bento-badge">G</div>
+        <div class="bento-role">Student Ambassador</div>
+        <div class="bento-org">@ Google [MAY 2026 - PRESENT]</div>
+        <p>Representing Google's developer ecosystem on campus, promoting tools, workshops, and community engagement.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-badge" style="background:var(--cyan);color:var(--black);">T</div>
+        <div class="bento-role">Member</div>
+        <div class="bento-org">@ Tinkerhub [FEB 2026 - PRESENT]</div>
+        <p>Collaborating in grassroots tech communities focused on peer-to-peer knowledge exchange and building software.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-badge" style="background:var(--magenta);color:var(--white);">A</div>
+        <div class="bento-role">Member</div>
+        <div class="bento-org">@ Research & Idea Cafe [NOV 2025 - PRESENT]</div>
+        <p>Engaging in research discussions, ideation, and innovation challenges at the KMEA Chapter (AICTE).</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="interactable">
+  <div class="tape" style="top:20px;left:50%;transform:translateX(-50%) rotate(2deg);width:250px;background:var(--p-blue);"></div>
+  <a href="mailto:ansilmuhammed919@gmail.com" class="footer-contact">INITIATE_CONTACT ↗</a>
+  
+  <div class="socials">
+    <a href="https://github.com/CLASHLEX/" target="_blank">GITHUB</a>
+    <a href="https://gitlab.com/ClashLex" target="_blank">GITLAB</a>
+    <a href="https://linkedin.com/in/ansil-muhammed-n-s-882449377" target="_blank">LINKEDIN</a>
+    <!-- FIX: Explicitly handle click behavior to prevent empty hashes from causing browser-level document/download mismatches -->
+    <a href="javascript:void(0);" class="chelsea" onclick="event.preventDefault();">KTBFFH 🔵</a>
+  </div>
+
+  <div class="footer-btm">
+    © 2026 // CLASHLEX // BUILT IN SUPREME OVERDRIVE V5 // SHIPPED MAXIMALIST
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+  // 1. Custom Cursor
+  const cur = document.getElementById('cursor');
+  if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    let cursorInitialized = false;
+    window.addEventListener('mousemove', e => { 
+      if (!cursorInitialized) {
+        document.body.classList.add('hide-native-cursor');
+        cur.style.opacity = '1';
+        cursorInitialized = true;
+      }
+      cur.style.left = e.clientX + 'px'; 
+      cur.style.top = e.clientY + 'px'; 
+    });
+    // FIX: Include 'button' and other interactable controls in the custom cursor hover effects
+    document.querySelectorAll('.interactable, a, button, .bento-card, .pixel-pill, .brutal-link').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('hov'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('hov'));
+    });
+  }
+
+  // 2. Parallax Pillar & Dynamic Height Adjustment
+  const p = document.getElementById('pillar');
+  if (p) {
+    const adjustPillarHeight = () => {
+      if (window.innerWidth <= 1024) return;
+      const docHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight,
+        document.body.clientHeight,
+        document.documentElement.clientHeight
+      );
+      // Ensure the pillar is always taller than the page scroll height plus parallax offset
+      p.style.height = (docHeight * 1.5) + 'px';
+    };
+
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY;
+      if (window.innerWidth > 1024) {
+        p.style.transform = `translateY(${s * -0.15}px)`;
+      }
+    });
+
+    window.addEventListener('resize', adjustPillarHeight);
+    window.addEventListener('load', adjustPillarHeight);
+    // Initial run
+    adjustPillarHeight();
+    // Also run typewriter/intro updates in case content changes height dynamically
+    setTimeout(adjustPillarHeight, 100);
+    setTimeout(adjustPillarHeight, 1000);
+  }
+
+  // 3. Draggable OS Window & Controls
+  const win = document.getElementById('drag-window');
+  const handle = document.getElementById('drag-handle');
+  if (win && handle) {
+    let dragging = false, ix=0, iy=0, ox=0, oy=0, cx=0, cy=0;
+    let isMaximized = false;
+    let originalStyle = {};
+    handle.style.cursor = 'grab';
+
+    const startDrag = (e) => {
+      if (window.innerWidth <= 768) return;
+      if (isMaximized) return;
+      if (e.target.closest('.controls')) return; // FIX: Ignore drag triggering on close/min/max window controls
+      dragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      ix = clientX - ox; iy = clientY - oy;
+      handle.style.cursor = 'grabbing'; win.style.zIndex = 100;
+    };
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false; handle.style.cursor = 'grab'; win.style.zIndex = 1; ox = cx; oy = cy;
+    };
+
+    const drag = (e) => {
+      if (!dragging) return;
+      if (e.cancelable) e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      cx = clientX - ix; cy = clientY - iy;
+      // Clamp so the window can't go off-screen
+      const maxX = window.innerWidth * 0.35;
+      const maxY = window.innerHeight * 0.35;
+      cx = Math.max(-maxX, Math.min(maxX, cx));
+      cy = Math.max(-maxY, Math.min(maxY, cy));
+      win.style.transform = `translate(${cx}px, ${cy}px) rotate(-0.5deg)`;
+    };
+
+    // Attach event listeners for mouse and touch interactions (FIX: Add touch support for dragging on tablets/mobile)
+    handle.addEventListener('mousedown', startDrag);
+    handle.addEventListener('touchstart', startDrag, { passive: false });
+
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchend', endDrag);
+    window.addEventListener('touchcancel', endDrag);
+
+    window.addEventListener('mousemove', drag, { passive: false });
+    window.addEventListener('touchmove', drag, { passive: false });
+
+    // FIX: Functional Red (Close) control button
+    const closeBtn = handle.querySelector('.controls .btn:nth-child(1)');
+    if (closeBtn) {
+      closeBtn.style.cursor = 'pointer';
+      closeBtn.addEventListener('click', () => {
+        win.style.display = 'none';
+        
+        // Show restore button
+        let restoreBtn = document.getElementById('restore-terminal-btn');
+        if (!restoreBtn) {
+          restoreBtn = document.createElement('button');
+          restoreBtn.id = 'restore-terminal-btn';
+          restoreBtn.innerHTML = '⚡ RESTORE TERMINAL';
+          restoreBtn.style.position = 'fixed';
+          restoreBtn.style.bottom = '20px';
+          restoreBtn.style.right = '20px';
+          restoreBtn.style.zIndex = '999';
+          restoreBtn.style.background = 'var(--bg-lime)';
+          restoreBtn.style.color = 'var(--black)';
+          restoreBtn.style.border = 'var(--b-heavy)';
+          restoreBtn.style.padding = '10px 15px';
+          restoreBtn.style.fontFamily = 'var(--ff-mono)';
+          restoreBtn.style.fontWeight = '700';
+          restoreBtn.style.boxShadow = '4px 4px 0 var(--black)';
+          restoreBtn.style.cursor = 'pointer';
+          restoreBtn.className = 'interactable';
+          
+          restoreBtn.addEventListener('click', () => {
+            win.style.display = 'block';
+            restoreBtn.remove();
+          });
+          
+          document.body.appendChild(restoreBtn);
+          
+          if (window.matchMedia('(hover:hover) and (pointer:fine)').matches && cur) {
+            restoreBtn.addEventListener('mouseenter', () => cur.classList.add('hov'));
+            restoreBtn.addEventListener('mouseleave', () => cur.classList.remove('hov'));
+          }
+        }
+      });
+    }
+
+    // FIX: Functional Yellow (Minimize) control button (collapse content)
+    const minBtn = handle.querySelector('.controls .btn:nth-child(2)');
+    const osBody = win.querySelector('.os-body');
+    if (minBtn && osBody) {
+      minBtn.style.cursor = 'pointer';
+      minBtn.addEventListener('click', () => {
+        if (osBody.style.display === 'none') {
+          osBody.style.display = 'flex';
+          win.style.height = 'auto';
+        } else {
+          osBody.style.display = 'none';
+        }
+      });
+    }
+
+    // FIX: Functional Green (Maximize) control button
+    const maxBtn = handle.querySelector('.controls .btn:nth-child(3)');
+    if (maxBtn) {
+      maxBtn.style.cursor = 'pointer';
+      maxBtn.addEventListener('click', () => {
+        if (!isMaximized) {
+          // Save original styles
+          originalStyle = {
+            position: win.style.position,
+            top: win.style.top,
+            left: win.style.left,
+            transform: win.style.transform,
+            width: win.style.width,
+            maxWidth: win.style.maxWidth,
+            height: win.style.height,
+            margin: win.style.margin,
+            zIndex: win.style.zIndex,
+            overflowY: win.style.overflowY
+          };
+          // Apply maximized styles
+          win.style.position = 'fixed';
+          win.style.top = '0';
+          win.style.left = '0';
+          win.style.width = '100vw';
+          win.style.height = '100vh';
+          win.style.maxWidth = '100vw';
+          win.style.transform = 'none';
+          win.style.margin = '0';
+          win.style.zIndex = '999';
+          win.style.overflowY = 'auto';
+          isMaximized = true;
+        } else {
+          // Restore original styles
+          Object.assign(win.style, originalStyle);
+          isMaximized = false;
+        }
+      });
+    }
+  }
+
+  // 4. Terminal Typewriter
+  const text = "> First-year Computer Science student with beginner-level knowledge in C, JavaScript, Bash, and Python.\n> Completed real-world projects in water quality monitoring and browser-based web development.\n> Passionate about AI integration, hardware, and vibe coding.";
+  let i = 0;
+  const target = document.getElementById('typewriter-text');
+  function typeWriter() {
+    if (target && i < text.length) {
+      if(text.charAt(i) === '\n') {
+        target.innerHTML += "<br><br>"; i++;
+      } else {
+        target.innerHTML += text.charAt(i); i++;
+      }
+      setTimeout(typeWriter, 20);
+    }
+  }
+  setTimeout(typeWriter, 800);
+
+  // 5. Name Particle Canvas Effect
+  const canvas = document.getElementById('name-particles');
+  const wrapper = document.querySelector('.glitch-wrapper');
+  if (canvas && wrapper) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: null, y: null, active: false };
+
+    function resizeCanvas() {
+      const rect = wrapper.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 3;
+        this.vy = (Math.random() - 0.5) * 3 - 0.5;
+        this.size = Math.random() * 8 + 4;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.015 + 0.01;
+        this.shape = Math.floor(Math.random() * 3);
+        const colors = ['#F06560', '#6366F1', '#2DD4BF', '#F59E0B', '#1B1B2F', '#EEF2FF'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotSpeed = (Math.random() - 0.5) * 0.1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+        this.rotation += this.rotSpeed;
+        
+        if (mouse.active) {
+          const dx = this.x - mouse.x;
+          const dy = this.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 60) {
+            const force = (60 - dist) / 60;
+            this.vx += (dx / dist) * force * 0.4;
+            this.vy += (dy / dist) * force * 0.4;
+          }
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+
+        if (this.shape === 0) {
+          ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+          ctx.strokeStyle = '#0B0C10';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-this.size/2, -this.size/2, this.size, this.size);
+        } else if (this.shape === 1) {
+          ctx.beginPath();
+          ctx.arc(0, 0, this.size/2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#0B0C10';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(-this.size/2, 0);
+          ctx.lineTo(this.size/2, 0);
+          ctx.moveTo(0, -this.size/2);
+          ctx.lineTo(0, this.size/2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+    }
+
+    wrapper.addEventListener('mousemove', e => {
+      const rect = wrapper.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+
+      if (Math.random() < 0.7) {
+        particles.push(new Particle(mouse.x, mouse.y));
+      }
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      mouse.active = false;
+    });
+
+    function ambientSpawn() {
+      if (!mouse.active && Math.random() < 0.04) {
+        const x = Math.random() * (canvas.width / (window.devicePixelRatio || 1));
+        const y = Math.random() * (canvas.height / (window.devicePixelRatio || 1));
+        particles.push(new Particle(x, y));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ambientSpawn();
+      particles = particles.filter(p => {
+        p.update();
+        if (p.alpha > 0) {
+          p.draw();
+          return true;
+        }
+        return false;
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
+</script>
+<script src="deeplink-helper.js"></script>
+</body>
+</html>
