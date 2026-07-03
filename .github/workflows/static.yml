@@ -15,10 +15,11 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment. Cancel in-progress runs when a new one is queued.
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   # Single deploy job since we're just deploying
@@ -30,59 +31,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
-      - name: (optional) Setup Node
-        if: hashFiles('package.json') != ''
-        uses: actions/setup-node@v4
-
-      - name: Install & build if needed, and prepare 'public' folder
-        run: |
-          set -e
-          # If a package.json exists, attempt to install and build
-          if [ -f package.json ]; then
-            echo "package.json found — installing dependencies and attempting build"
-            npm ci || true
-            npm run build || true
-          else
-            echo "no package.json — skipping JS build"
-          fi
-
-          # If a typical output folder already exists, normalize it to 'public'
-          if [ -d public ]; then
-            echo "'public' directory already present — will deploy it"
-          elif [ -d dist ]; then
-            echo "found 'dist' — renaming to 'public'"
-            mv dist public
-          elif [ -d build ]; then
-            echo "found 'build' — renaming to 'public'"
-            mv build public
-          elif [ -d out ]; then
-            echo "found 'out' — renaming to 'public'"
-            mv out public
-          elif [ -d _site ]; then
-            echo "found '_site' — renaming to 'public'"
-            mv _site public
-          else
-            echo "no build output folder found — creating 'public' and copying common static files"
-            mkdir -p public
-            # Copy all HTML files, JS, and common asset directories
-            cp *.html public/ 2>/dev/null || true
-            cp *.js public/ 2>/dev/null || true
-            cp *.css public/ 2>/dev/null || true
-            cp *.png *.jpg *.jpeg *.gif *.svg *.ico *.webp public/ 2>/dev/null || true
-            for d in assets static css js images fonts; do [ -d "$d" ] && cp -R "$d" public/ || true; done
-          fi
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload prepared 'public' folder only — safer than uploading entire repo
-          path: 'public'
-          overwrite: true
-
+          # Upload entire repository
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
