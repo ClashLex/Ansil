@@ -1,22 +1,75 @@
-name: Deploy static content to Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
+    inputs:
+      publish_dir:
+        description: 'Directory to publish (relative to repo root). Defaults to repository root.'
+        required: false
+        default: './'
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: pages-${{ github.ref }}
+      cancel-in-progress: true
+    env:
+      PUBLISH_DIR: ${{ github.event.inputs.publish_dir || './' }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Detect build artifacts and (optionally) build
+        id: build
+        run: |
+          echo "PUBLISH_DIR=${PUBLISH_DIR}"
+          if [ -f package.json ]; then
+            corepack enable || true
+            if [ -f package-lock.json ] || [ -f yarn.lock ] || [ -f pnpm-lock.yaml ]; then
+              npm ci || true
+            else
+              npm install || true
+            fi
+            if node -e "const p=require('./package.json'); process.exit(!p.scripts||!p.scripts.build)"; then
+              npm run build || true
+            fi
+            if [ -d dist ]; then
+              echo "OUTPUT_DIR=dist" >> $GITHUB_ENV
+            elif [ -d build ]; then
+              echo "OUTPUT_DIR=build" >> $GITHUB_ENV
+            elif [ -d public ]; then
+              echo "OUTPUT_DIR=public" >> $GITHUB_ENV
+            elif [ -d docs ]; then
+              echo "OUTPUT_DIR=docs" >> $GITHUB_ENV
+            else
+              echo "OUTPUT_DIR=${PUBLISH_DIR}" >> $GITHUB_ENV
+            fi
+          else
+            echo "OUTPUT_DIR=${PUBLISH_DIR}" >> $GITHUB_ENV
+          fi
+
+      - name: Show chosen publish directory
+        run: |
+          echo "Publishing contents of: ${{ env.OUTPUT_DIR }}"
+          ls -la "${{ env.OUTPUT_DIR }}" || true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          path: ${{ env.OUTPUT_DIR }}
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+
+      - name: Show Pages URL
+        run: |
+          echo "Pages deployment finished. Check Settings → Pages → Deployment history for details and build logs."
