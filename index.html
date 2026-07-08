@@ -27,7 +27,7 @@
       --charcoal: #555555;
       --ink:      #1A1A1A;
       --accent:   #1A1A1A;
-      --ff-serif: 'Instrument Serif', serif;
+      --ff-serif: 'PP Editorial New', 'Instrument Serif', serif;
       --ff-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       
       /* Liquid Glass Glassmorphism Styles */
@@ -45,7 +45,8 @@
     body {
       min-height: 100vh;
       background-color: #FFF3EC;
-      background-image: url('peach_fluid_background.webp');
+      /* Soft radial gradient to keep center 10-20% lighter as negative space */
+      background-image: radial-gradient(circle at center, rgba(255, 253, 251, 0.92) 10%, rgba(255, 243, 236, 0.3) 80%), url('peach_fluid_background.webp');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -64,8 +65,8 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.018;
-      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
+      opacity: 0.035; /* reduced opacity for extremely subtle static noise */
+      background: url('noise.png') repeat;
       z-index: 100;
     }
 
@@ -120,8 +121,8 @@
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(95px);
-      opacity: 0.28;
+      filter: blur(50px); /* optimized blur radius */
+      opacity: 0.22;       /* subtle perimeter focus */
       animation: float-blob 25s infinite alternate ease-in-out;
       will-change: transform;
     }
@@ -166,9 +167,9 @@
     .top-bar-time {
       font-family: var(--ff-sans);
       font-size: 12px;
-      font-weight: 300;
+      font-weight: 400;
       letter-spacing: 0.08em;
-      color: var(--graphite);
+      color: var(--charcoal); /* increased contrast clock text */
       text-transform: uppercase;
     }
 
@@ -187,7 +188,7 @@
       line-height: 0.9;
       letter-spacing: -0.03em;
       color: var(--ink);
-      margin-bottom: 24px;
+      margin-bottom: 16px; /* tighter spacing */
     }
     .hero-title em {
       font-style: italic;
@@ -201,7 +202,7 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--graphite);
-      margin-bottom: 32px;
+      margin-bottom: 20px; /* tighter spacing */
     }
 
     /* Thin divider line */
@@ -209,7 +210,7 @@
       width: 48px;
       height: 1px;
       background: var(--silver);
-      margin: 0 auto 24px;
+      margin: 0 auto 16px; /* tighter spacing */
     }
 
     .hero-bio {
@@ -257,14 +258,16 @@
       align-items: center;
       gap: 20px;
       padding: 18px 24px;
-      margin-bottom: 16px;
+      margin-bottom: 20px; /* increased card spacing */
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
+      backdrop-filter: blur(16px) saturate(1.3); /* standard CSS glass fallback */
+      -webkit-backdrop-filter: blur(16px) saturate(1.3);
       text-decoration: none;
       color: var(--ink);
       position: relative;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* smoother transition */
       opacity: 0;
       transform: translateY(16px);
       animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -275,10 +278,27 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0) 100%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%); /* brighter highlight */
       pointer-events: none;
       z-index: 1;
     }
+    /* Subtle animated glare sweep */
+    .link-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0) 100%);
+      transform: skewX(-25deg);
+      z-index: 2;
+      animation: shine 15s infinite ease-in-out;
+      pointer-events: none;
+    }
+    .link-card:nth-child(1)::after { animation-delay: 0s; }
+    .link-card:nth-child(2)::after { animation-delay: 2.2s; }
+    .link-card:nth-child(3)::after { animation-delay: 4.4s; }
+    .link-card:nth-child(4)::after { animation-delay: 6.6s; }
+    .link-card:nth-child(5)::after { animation-delay: 8.8s; }
+    .link-card:nth-child(6)::after { animation-delay: 11s; }
 
     .link-card:nth-child(1) { animation-delay: 0.1s; }
     .link-card:nth-child(2) { animation-delay: 0.17s; }
@@ -290,6 +310,11 @@
 
     @keyframes fadeUp {
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shine {
+      0% { left: -100%; }
+      18% { left: 100%; }
+      100% { left: 100%; }
     }
 
     .link-card:hover {
@@ -351,21 +376,19 @@
     .link-desc {
       font-family: var(--ff-sans);
       font-size: 12px;
-      font-weight: 300;
-      color: var(--graphite);
+      font-weight: 400; /* slightly bolder for readability */
+      color: var(--charcoal); /* contrast accessibility fix */
       letter-spacing: 0.02em;
     }
 
-    /* Arrow */
     .link-arrow {
       font-family: var(--ff-sans);
       font-size: 18px;
       font-weight: 300;
-      color: var(--silver);
+      color: var(--ink); /* always black/ink */
       transition: color 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .link-card:hover .link-arrow {
-      color: var(--ink);
       transform: translate(4px, -4px);
     }
 
@@ -378,6 +401,8 @@
       flex-shrink: 0;
       position: relative;
       z-index: 10;
+      content-visibility: auto; /* avoid rendering offscreen content */
+      contain-intrinsic-size: auto 200px;
     }
 
     .footer-cta {
@@ -455,16 +480,17 @@
     /* ── MARQUEE ── */
     .marquee-strip {
       overflow: hidden;
-      border-top: 1px solid rgba(26, 26, 26, 0.08);
-      border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+      border-top: 1px solid rgba(26, 26, 26, 0.04); /* thinner blend border */
+      border-bottom: 1px solid rgba(26, 26, 26, 0.04);
       padding: 14px 0;
       position: relative;
       z-index: 2;
+      opacity: 0.45; /* subtle blending */
     }
     .marquee-inner {
       display: inline-block;
       white-space: nowrap;
-      animation: mq 20s linear infinite;
+      animation: mq 35s linear infinite; /* slowed down cycle */
     }
     .marquee-inner span {
       font-family: var(--ff-serif);
@@ -491,6 +517,8 @@
       padding: clamp(48px, 8vh, 80px) 24px;
       position: relative;
       z-index: 2;
+      content-visibility: auto; /* avoid rendering offscreen content */
+      contain-intrinsic-size: auto 600px;
     }
 
     .snake-header {
@@ -533,6 +561,8 @@
       overflow: hidden;
       background: var(--glass-bg);
       box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(12px) saturate(1.25); /* standard CSS glass fallback */
+      -webkit-backdrop-filter: blur(12px) saturate(1.25);
       transition: box-shadow 0.3s, border-color 0.3s;
     }
     .snake-canvas-wrap::before {
@@ -688,25 +718,46 @@
     @media (max-width: 600px) {
       /* Performance optimization for mobile blurs */
       .blob {
-        filter: blur(60px);
-        opacity: 0.22;
+        filter: blur(35px); /* even lighter blur for mobile screens */
+        opacity: 0.16;
       }
       .top-bar { padding: 12px 16px; }
       .hero { padding: 24px 16px 16px; }
-      .hero-title { margin-bottom: 16px; }
-      .hero-subtitle { margin-bottom: 20px; }
+      .hero-title { margin-bottom: 12px; }
+      .hero-subtitle { margin-bottom: 16px; }
       .links-section { padding: 0 16px 32px; }
       .link-card { 
         gap: 12px; 
         padding: 14px 16px; 
         border-radius: 12px; 
-        margin-bottom: 12px;
+        margin-bottom: 16px; /* increased card spacing on mobile */
       }
       .link-icon { width: 32px; height: 32px; }
       .link-icon svg { width: 14px; height: 14px; }
       .snake-section { padding: 24px 16px; }
       .snake-canvas-wrap { margin-bottom: 16px; border-radius: 12px; }
       footer { padding: 24px 16px; }
+    }
+
+    /* ── ACCESSIBILITY: REDUCED MOTION PREFERENCE ── */
+    @media (prefers-reduced-motion: reduce) {
+      .blob {
+        animation: none !important;
+        transform: none !important;
+      }
+      .marquee-inner {
+        animation: none !important;
+        transform: none !important;
+      }
+      .link-card::after {
+        animation: none !important;
+      }
+      * {
+        transition-duration: 0.001s !important;
+        animation-duration: 0.001s !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
@@ -950,7 +1001,14 @@
   // ══════════════════════════════════════════
   //  SNAKE GAME
   // ══════════════════════════════════════════
-  (function() {
+  // ══════════════════════════════════════════
+  //  SNAKE GAME (Lazy Loaded)
+  // ══════════════════════════════════════════
+  let snakeInitialized = false;
+  function initSnakeGame() {
+    if (snakeInitialized) return;
+    snakeInitialized = true;
+
     const canvas = document.getElementById('snake-canvas');
     const ctx = canvas.getContext('2d');
     const wrap = document.getElementById('snake-wrap');
@@ -1218,11 +1276,43 @@
       if (!running) draw();
     });
 
-    // Initial draw
     init();
-  })();
+  }
 
-  // ── Liquid Glass Initialization ──
+  // ── Lazy Loading intersection observers ──
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Lazy initialize Snake game when it intersects
+    const snakeSec = document.getElementById('snake-section');
+    if (snakeSec && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            initSnakeGame();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '100px' });
+      observer.observe(snakeSec);
+    } else {
+      initSnakeGame();
+    }
+
+    // 2. Pause offscreen marquee animations
+    const marqueeStrip = document.querySelector('.marquee-strip');
+    if (marqueeStrip && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const inner = marqueeStrip.querySelector('.marquee-inner');
+          if (inner) {
+            inner.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+          }
+        });
+      }, { threshold: 0 });
+      observer.observe(marqueeStrip);
+    }
+  });
+
+  // ── Liquid Glass Initialization (Selective & Optimized) ──
   if (typeof liquidGlass === 'function') {
     const glassOpts = { scale: -112, blur: 16, saturate: 1.3 };
     
@@ -1230,14 +1320,9 @@
     const headerEl = document.querySelector('.top-bar');
     if (headerEl) liquidGlass(headerEl, { scale: -40, blur: 12, saturate: 1.2 });
     
-    // Link cards
-    document.querySelectorAll('.link-card').forEach(card => {
-      liquidGlass(card, glassOpts);
-    });
-    
-    // Snake Wrap
-    const snakeWrapEl = document.getElementById('snake-wrap');
-    if (snakeWrapEl) liquidGlass(snakeWrapEl, { scale: -90, blur: 12, saturate: 1.25 });
+    // Featured Card (only full Liquid Glass on the first card to save CPU performance)
+    const featuredCard = document.getElementById('link-github');
+    if (featuredCard) liquidGlass(featuredCard, glassOpts);
     
     // Footer CTA
     const footerCtaEl = document.querySelector('.footer-cta');
