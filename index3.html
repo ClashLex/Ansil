@@ -31,12 +31,12 @@
       --ff-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       
       /* Liquid Glass Glassmorphism Styles */
-      --glass-bg:           rgba(255, 255, 255, 0.45);
-      --glass-bg-hover:     rgba(255, 255, 255, 0.65);
-      --glass-border:       rgba(255, 255, 255, 0.5);
-      --glass-border-hover: rgba(255, 255, 255, 0.75);
-      --glass-shadow:       0 8px 32px 0 rgba(0, 0, 0, 0.03);
-      --glass-shadow-hover: 0 16px 40px 0 rgba(0, 0, 0, 0.06);
+      --glass-bg:           rgba(255, 255, 255, 0.08);
+      --glass-bg-hover:     rgba(255, 255, 255, 0.18);
+      --glass-border:       rgba(255, 255, 255, 0.65);
+      --glass-border-hover: rgba(255, 255, 255, 0.85);
+      --glass-shadow:       0 8px 32px 0 rgba(0, 0, 0, 0.04);
+      --glass-shadow-hover: 0 16px 40px 0 rgba(0, 0, 0, 0.08);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,7 +44,7 @@
 
     body {
       min-height: 100vh;
-      background: var(--white);
+      background: #FFF3EC; /* Light peach tinted background to contrast glass elements */
       font-family: var(--ff-sans);
       color: var(--ink);
       display: flex;
@@ -124,7 +124,7 @@
     .blob-1 {
       width: clamp(250px, 35vw, 450px);
       height: clamp(250px, 35vw, 450px);
-      background: linear-gradient(135deg, #e5e5eb, #f5f5f7);
+      background: linear-gradient(135deg, #FFD2C4, #FFE3D8); /* warm rose-peach */
       top: 10%;
       left: 10%;
       animation-duration: 22s;
@@ -132,7 +132,7 @@
     .blob-2 {
       width: clamp(300px, 45vw, 550px);
       height: clamp(300px, 45vw, 550px);
-      background: linear-gradient(135deg, #f0f0f0, #e8e8ed);
+      background: linear-gradient(135deg, #FFE8D6, #FFF1E6); /* warm apricot */
       bottom: 10%;
       right: 15%;
       animation-duration: 32s;
@@ -141,7 +141,7 @@
     .blob-3 {
       width: clamp(200px, 25vw, 350px);
       height: clamp(200px, 25vw, 350px);
-      background: linear-gradient(135deg, #fafafa, #eeeeee);
+      background: linear-gradient(135deg, #E2E2F0, #F0F0FA); /* cool lilac/mist */
       top: 60%;
       left: 45%;
       animation-duration: 28s;
@@ -290,8 +290,8 @@
     .link-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; height: 50%;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0) 100%);
       pointer-events: none;
       z-index: 1;
     }
@@ -325,7 +325,8 @@
     .link-icon {
       width: 40px; height: 40px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.03);
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -932,7 +933,7 @@
     t.textContent = msg;
     area.appendChild(t);
     if (typeof liquidGlass === 'function') {
-      liquidGlass(t, { scale: -30, blur: 5, saturate: 1.1 });
+      liquidGlass(t, { scale: -30, blur: 10, saturate: 1.15 });
     }
     setTimeout(() => {
       t.style.opacity = '0';
@@ -1227,11 +1228,11 @@
 
   // ── Liquid Glass Initialization ──
   if (typeof liquidGlass === 'function') {
-    const glassOpts = { scale: -80, blur: 4, saturate: 1.25 };
+    const glassOpts = { scale: -112, blur: 16, saturate: 1.3 };
     
     // Header
     const headerEl = document.querySelector('.top-bar');
-    if (headerEl) liquidGlass(headerEl, { scale: -30, blur: 5, saturate: 1.2 });
+    if (headerEl) liquidGlass(headerEl, { scale: -40, blur: 12, saturate: 1.2 });
     
     // Link cards
     document.querySelectorAll('.link-card').forEach(card => {
@@ -1240,11 +1241,11 @@
     
     // Snake Wrap
     const snakeWrapEl = document.getElementById('snake-wrap');
-    if (snakeWrapEl) liquidGlass(snakeWrapEl, { scale: -90, blur: 5, saturate: 1.2 });
+    if (snakeWrapEl) liquidGlass(snakeWrapEl, { scale: -90, blur: 12, saturate: 1.25 });
     
     // Footer CTA
     const footerCtaEl = document.querySelector('.footer-cta');
-    if (footerCtaEl) liquidGlass(footerCtaEl, { scale: -30, blur: 4, saturate: 1.2 });
+    if (footerCtaEl) liquidGlass(footerCtaEl, { scale: -40, blur: 10, saturate: 1.25 });
   }
 </script>
 <script src="deeplink-helper.js"></script>
