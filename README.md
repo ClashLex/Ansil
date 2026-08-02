@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="public/icon.svg" width="96" height="96" alt="Ansil Muhammed Logo" />
+  <img src="public/avatar.jpg" width="112" height="112" style="border-radius: 50%;" alt="Ansil Muhammed Avatar" />
 
   # Ansil Muhammed N S
   ### *@ClashLex*
