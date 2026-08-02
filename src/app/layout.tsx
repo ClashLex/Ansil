@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   title: "Ansil Muhammed N S — Links",
   description:
     "Connect with Ansil Muhammed N S — Engineer, Builder, Open Source advocate. GitHub, Twitter, Instagram, LinkedIn, GitLab.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   other: {
     "color-scheme": "light",
   },

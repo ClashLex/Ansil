@@ -421,6 +421,36 @@ footer {
   box-shadow: var(--glass-shadow-hover);
 }
 
+.footer-next-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--ff-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+}
+.next-logo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.next-logo-tag:hover {
+  transform: translateY(-1px);
+  border-color: var(--glass-border-hover);
+}
+
 .footer-copy {
   font-family: var(--ff-sans);
   font-size: 11px;
