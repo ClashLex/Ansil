@@ -42,7 +42,9 @@ jobs:
             if node -e "const p=require('./package.json'); process.exit(!p.scripts||!p.scripts.build)"; then
               npm run build || true
             fi
-            if [ -d dist ]; then
+            if [ -d out ]; then
+              echo "OUTPUT_DIR=out" >> $GITHUB_ENV
+            elif [ -d dist ]; then
               echo "OUTPUT_DIR=dist" >> $GITHUB_ENV
             elif [ -d build ]; then
               echo "OUTPUT_DIR=build" >> $GITHUB_ENV
