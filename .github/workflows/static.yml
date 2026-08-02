@@ -1,77 +1,60 @@
-name: Deploy to GitHub Pages
+name: Deploy Next.js site to Pages
 
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
-    inputs:
-      publish_dir:
-        description: 'Directory to publish (relative to repo root). Defaults to repository root.'
-        required: false
-        default: './'
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    concurrency:
-      group: pages-${{ github.ref }}
-      cancel-in-progress: true
-    env:
-      PUBLISH_DIR: ${{ github.event.inputs.publish_dir || './' }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Detect build artifacts and (optionally) build
-        id: build
-        run: |
-          echo "PUBLISH_DIR=${PUBLISH_DIR}"
-          if [ -f package.json ]; then
-            corepack enable || true
-            if [ -f package-lock.json ] || [ -f yarn.lock ] || [ -f pnpm-lock.yaml ]; then
-              npm ci || true
-            else
-              npm install || true
-            fi
-            if node -e "const p=require('./package.json'); process.exit(!p.scripts||!p.scripts.build)"; then
-              npm run build || true
-            fi
-            if [ -d out ]; then
-              echo "OUTPUT_DIR=out" >> $GITHUB_ENV
-            elif [ -d dist ]; then
-              echo "OUTPUT_DIR=dist" >> $GITHUB_ENV
-            elif [ -d build ]; then
-              echo "OUTPUT_DIR=build" >> $GITHUB_ENV
-            elif [ -d public ]; then
-              echo "OUTPUT_DIR=public" >> $GITHUB_ENV
-            elif [ -d docs ]; then
-              echo "OUTPUT_DIR=docs" >> $GITHUB_ENV
-            else
-              echo "OUTPUT_DIR=${PUBLISH_DIR}" >> $GITHUB_ENV
-            fi
-          else
-            echo "OUTPUT_DIR=${PUBLISH_DIR}" >> $GITHUB_ENV
-          fi
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
 
-      - name: Show chosen publish directory
-        run: |
-          echo "Publishing contents of: ${{ env.OUTPUT_DIR }}"
-          ls -la "${{ env.OUTPUT_DIR }}" || true
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
 
-      - name: Upload Pages artifact
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with Next.js
+        run: npx next build
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.OUTPUT_DIR }}
+          path: ./out
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Show Pages URL
-        run: |
-          echo "Pages deployment finished. Check Settings → Pages → Deployment history for details and build logs."
