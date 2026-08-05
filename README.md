@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="public/avatar.jpg" width="112" height="112" style="border-radius: 50%;" alt="Ansil Muhammed Avatar" />
+  <img src="docs/profile.jpg" width="112" height="112" style="border-radius: 50%;" alt="Ansil Muhammed Avatar" />
 
   # Ansil Muhammed N S
   ### *@ClashLex*
