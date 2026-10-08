@@ -281,40 +281,65 @@ const ParticleText = ({
       const offCtx = offscreen.getContext('2d', { willReadFrequently: true });
       if (!offCtx) return;
 
-      const content = String(text || ' ');
+      const rawLines = String(text || ' ').split('\n');
       const maxTextWidth = width * 0.92;
       offCtx.font = font;
-      let metrics = offCtx.measureText(content);
-      const measuredWidth = Math.max(1, metrics.width);
-      if (measuredWidth > maxTextWidth) {
-        resolvedSize = Math.max(18, resolvedSize * (maxTextWidth / measuredWidth));
+      const measureLine = (line: string) => {
+        const mm = offCtx.measureText(line);
+        return {
+          line,
+          left: mm.actualBoundingBoxLeft || 0,
+          right: mm.actualBoundingBoxRight || mm.width,
+          ascent: mm.actualBoundingBoxAscent || resolvedSize * 0.78,
+          descent: mm.actualBoundingBoxDescent || resolvedSize * 0.22
+        };
+      };
+      let lineMetrics = rawLines.map(measureLine);
+      let maxLineWidth = Math.max(1, ...lineMetrics.map(m => m.left + m.right));
+      if (maxLineWidth > maxTextWidth) {
+        resolvedSize = Math.max(18, resolvedSize * (maxTextWidth / maxLineWidth));
         font = `${stylePrefix}${fontWeight} ${resolvedSize}px ${resolvedFamily}`;
         await waitForFonts(font);
         if (currentBuild !== buildId) return;
         offCtx.font = font;
-        metrics = offCtx.measureText(content);
+        lineMetrics = rawLines.map(measureLine);
+        maxLineWidth = Math.max(1, ...lineMetrics.map(m => m.left + m.right));
       }
 
-      const left = Math.ceil(metrics.actualBoundingBoxLeft || 0);
-      const right = Math.ceil(metrics.actualBoundingBoxRight || metrics.width);
-      const ascent = Math.ceil(metrics.actualBoundingBoxAscent || resolvedSize * 0.78);
-      const descent = Math.ceil(metrics.actualBoundingBoxDescent || resolvedSize * 0.22);
+      const lineGap = resolvedSize * 0.12;
       const padding = Math.max(12, Math.ceil(resolvedSize * 0.08));
-      const textWidth = Math.max(1, left + right);
-      const textHeight = Math.max(1, ascent + descent);
+      const textWidth = Math.max(1, maxLineWidth);
+      const textHeight = Math.max(
+        1,
+        lineMetrics.reduce((sum, m) => sum + m.ascent + m.descent, 0) +
+          lineGap * Math.max(0, lineMetrics.length - 1)
+      );
 
-      offscreen.width = textWidth + padding * 2;
-      offscreen.height = textHeight + padding * 2;
+      offscreen.width = Math.ceil(textWidth + padding * 2);
+      offscreen.height = Math.ceil(textHeight + padding * 2);
       offCtx.clearRect(0, 0, offscreen.width, offscreen.height);
       offCtx.font = font;
       offCtx.textAlign = 'left';
       offCtx.textBaseline = 'alphabetic';
       offCtx.fillStyle = '#ffffff';
-      offCtx.fillText(content, padding - left, padding + ascent);
+      let cursorY = padding;
+      lineMetrics.forEach(m => {
+        const lineW = m.left + m.right;
+        if (m.line.length === 0) {
+          cursorY += resolvedSize + lineGap;
+          return;
+        }
+        const originX = padding + (textWidth - lineW) / 2 - m.left;
+        offCtx.fillText(m.line, originX, cursorY + m.ascent);
+        cursorY += m.ascent + m.descent + lineGap;
+      });
 
       const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height);
+      // Coarser sampling on narrow screens: fewer grains on mobile,
+      // which also eases GPU load. Re-evaluated on every resample.
+      const coarse = width < 480 ? 2 : 1;
       const targets: Target[] = [];
-      const step = Math.max(2, Math.floor(density));
+      const step = Math.max(2, Math.floor(density * coarse));
 
       for (let y = 0; y < offscreen.height; y += step) {
         for (let x = 0; x < offscreen.width; x += step) {
@@ -331,7 +356,11 @@ const ParticleText = ({
 
       // Denser budget than the default so thin serif strokes (e.g. the
       // crossbar of an italic "t") resolve cleanly instead of looking broken.
-      const maxParticles = Math.max(1800, Math.min(9000, Math.floor((width * height) / 45)));
+      // Scaled back on mobile via the same coarseness factor.
+      const maxParticles = Math.max(
+        Math.ceil(1800 / coarse),
+        Math.min(9000, Math.floor((width * height) / (45 * coarse)))
+      );
       const stride = Math.max(1, Math.ceil(targets.length / maxParticles));
       const baseRgb = hexToRgb(color);
       const highlightRgb = hexToRgb(highlightColor);

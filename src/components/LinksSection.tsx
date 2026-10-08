@@ -56,12 +56,12 @@ export default function LinksSection() {
   return (
     <section className="links-section" aria-label="Social links">
       <ParticleText
-        text="Connect"
-        className="connect-particle-text"
+        text={"Ansil\nMuhammed"}
+        className="name-particle-text"
         fontFamily="'Instrument Serif', serif"
         fontStyle="italic"
         fontWeight={400}
-        fontSize="clamp(3rem, 10vw, 6rem)"
+        fontSize="clamp(3rem, 12vw, 7rem)"
         color={dark ? "#F4F2ED" : "#1A1A1A"}
         highlightColor={dark ? "#C084FC" : "#A855F7"}
         density={2}
