@@ -408,6 +408,24 @@ const ParticleText = ({
       if (trigger === 'click') startGather(true);
     };
 
+    // Swipe-to-replay for touch users: a swipe across the heading
+    // re-scatters and re-gathers the particles. Passive listeners only —
+    // page scroll is never blocked.
+    const SWIPE_MIN = 24;
+    let touchStart: { x: number; y: number } | null = null;
+    const handleTouchStart = (event: TouchEvent): void => {
+      const touch = event.touches[0];
+      if (touch) touchStart = { x: touch.clientX, y: touch.clientY };
+    };
+    const handleTouchEnd = (event: TouchEvent): void => {
+      if (!touchStart) return;
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - touchStart.x;
+      const dy = touch.clientY - touchStart.y;
+      touchStart = null;
+      if (Math.hypot(dx, dy) > SWIPE_MIN) startGather(true);
+    };
+
     const reduceMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
     const handleReduceMotionChange = (event: MediaQueryListEvent): void => {
       reducedMotion = event.matches;
@@ -419,6 +437,8 @@ const ParticleText = ({
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerleave', handlePointerLeave);
     canvas.addEventListener('click', handleClick);
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     const resizeObserver = new ResizeObserver(queueSample);
     resizeObserver.observe(container);
@@ -432,6 +452,8 @@ const ParticleText = ({
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerleave', handlePointerLeave);
       canvas.removeEventListener('click', handleClick);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchend', handleTouchEnd);
 
       if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
       if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
