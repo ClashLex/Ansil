@@ -106,14 +106,6 @@ body.cursor-active * { cursor: none; }
   z-index: 2;
 }
 
-.links-section .name-particle-text {
-  display: block;
-  height: clamp(200px, 32vw, 300px);
-  min-height: 200px;
-  margin-bottom: 8px;
-  font-family: var(--ff-serif);
-}
-
 /* ── TOAST ── */
 #toast-area {
   position: fixed;
