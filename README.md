@@ -5,7 +5,7 @@
   # Ansil Muhammed N S
   ### *@ClashLex*
 
-  **Engineer · Builder · Open Source Advocate**
+  **Engineer · Builder · Open Source**
 
   *Crafting software, shipping products, and contributing to the open web.*
 
