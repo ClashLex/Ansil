@@ -24,7 +24,10 @@ export default function TopBar() {
   return (
     <header className="top-bar">
       <span className="top-bar-name">Ansil Muhammed</span>
-      <span className="top-bar-time">{time}</span>
+      <span className="top-bar-status">
+        <span className="live-dot" aria-hidden="true" />
+        <span className="top-bar-time">{time}</span>
+      </span>
     </header>
   );
 }

@@ -1,26 +1,21 @@
-import BackgroundBlobs from "@/components/BackgroundBlobs";
-import TopBar from "@/components/TopBar";
-import Hero from "@/components/Hero";
-import MarqueeStrip from "@/components/MarqueeStrip";
 import LinksSection from "@/components/LinksSection";
-import SnakeGame from "@/components/SnakeGame";
-import Footer from "@/components/Footer";
+import DarkModeButton from "@/components/DarkModeButton";
+import ThemedBackground from "@/components/ThemedBackground";
 import CustomCursor from "@/components/CustomCursor";
 import { ToastProvider } from "@/components/Toast";
+import ThemeProvider from "@/components/ThemeProvider";
 import LiquidGlassInit from "@/components/LiquidGlassInit";
 
 export default function Home() {
   return (
     <ToastProvider>
-      <CustomCursor />
-      <BackgroundBlobs />
-      <TopBar />
-      <Hero />
-      <MarqueeStrip />
-      <LinksSection />
-      <SnakeGame />
-      <Footer />
-      <LiquidGlassInit />
+      <ThemeProvider>
+        <CustomCursor />
+        <ThemedBackground />
+        <LinksSection />
+        <DarkModeButton />
+        <LiquidGlassInit />
+      </ThemeProvider>
     </ToastProvider>
   );
 }

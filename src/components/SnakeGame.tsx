@@ -1,55 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { initAudio } from "./LinksSection";
+import { playEat, playDie } from "@/lib/audio";
 
 const GRID = 20;
-
-// Audio context singleton (shared with LinksSection via initAudio)
-let audioCtx: AudioContext | null = null;
-
-function ensureAudio() {
-  initAudio();
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext)();
-  }
-  if (audioCtx.state === "suspended") audioCtx.resume();
-  return audioCtx;
-}
-
-function playEat() {
-  const ctx = ensureAudio();
-  if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const g = ctx.createGain();
-  osc.connect(g);
-  g.connect(ctx.destination);
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(880, ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.06);
-  g.gain.setValueAtTime(0.04, ctx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.06);
-}
-
-function playDie() {
-  const ctx = ensureAudio();
-  if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const g = ctx.createGain();
-  osc.connect(g);
-  g.connect(ctx.destination);
-  osc.type = "sawtooth";
-  osc.frequency.setValueAtTime(300, ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.2);
-  g.gain.setValueAtTime(0.05, ctx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.2);
-}
 
 interface Point {
   x: number;
@@ -122,7 +76,10 @@ export default function SnakeGame() {
     }
 
     // Food (Diamond shape)
-    ctx.fillStyle = "#1A1A1A";
+    ctx.save();
+    ctx.shadowColor = "rgba(168, 85, 247, 0.9)";
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = "#A855F7";
     const fx = food.x * cellSize + cellSize / 2;
     const fy = food.y * cellSize + cellSize / 2;
     const fr = cellSize * 0.35;
@@ -132,11 +89,12 @@ export default function SnakeGame() {
     ctx.lineTo(fx, fy + fr);
     ctx.lineTo(fx - fr, fy);
     ctx.fill();
+    ctx.restore();
 
     // Snake
     snake.forEach((seg, i) => {
       const alpha = 1 - (i / snake.length) * 0.6;
-      ctx.fillStyle = `rgba(26, 26, 26, ${alpha})`;
+      ctx.fillStyle = `rgba(240, 238, 232, ${alpha})`;
       const padding = i === 0 ? 1 : 2;
       const radius = i === 0 ? cellSize * 0.15 : cellSize * 0.1;
       const sx = seg.x * cellSize + padding;
