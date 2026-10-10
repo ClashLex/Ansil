@@ -40,15 +40,20 @@
 }
 
 .menu__item-arrow {
-  font-family: var(--ff-sans);
-  font-size: 0.6em;
-  font-weight: 300;
+  width: 0.52em;
+  height: 0.52em;
   flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  position: relative;
+  top: -0.085em;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .menu__item-link:hover .menu__item-arrow {
-  transform: translate(4px, -4px);
+  transform: translate(0.1em, -0.1em);
 }
 
 .marquee {
