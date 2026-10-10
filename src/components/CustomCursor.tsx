@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const INTERACTIVE_SELECTOR =
-  "a, button, .menu__item-link, .theme-toggle, canvas";
+  "a, button, .menu__item-link, canvas";
 
 function closestInteractive(target: EventTarget | null): Element | null {
   if (!target || !(target instanceof Element)) return null;

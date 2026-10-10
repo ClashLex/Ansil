@@ -3,7 +3,7 @@
    Instrument Serif + Inter
    ══════════════════════════════════════════════════════════════ */
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   --white:    #FFFFFF;
   --offwhite: #FAFAFA;
   --smoke:    #F5F5F5;
@@ -32,6 +32,18 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 ::selection { background: #A855F7; color: #FFFFFF; }
+/* Keyboard focus ring. The plain :focus rule is the fallback for WebKit
+   < 15.4 (common in older in-app browsers), where :focus-visible is an
+   unknown pseudo-class and the whole selector would be dropped. Browsers
+   that do support it reset the outline for non-keyboard focus below. */
+:focus {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
 :focus-visible {
   outline: 2px solid var(--violet);
   outline-offset: 3px;
@@ -48,6 +60,16 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* dvh tracks the collapsing browser chrome in iOS Safari and Android in-app
+   browsers. Kept in its own @supports block so the minifier can't discard
+   the 100vh fallback above as redundant — old engines get 100vh, new ones
+   get dvh. */
+@supports (height: 100dvh) {
+  body {
+    min-height: 100dvh;
+  }
 }
 
 /* ── SUBTLE GRAIN TEXTURE ── */
@@ -159,51 +181,6 @@ body.cursor-active * { cursor: none; }
 /* ── UTILITY ── */
 .hidden {
   display: none !important;
-}
-
-/* ── THEME TOGGLE BUTTON ── */
-.theme-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 9000;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--ink);
-  cursor: pointer;
-  backdrop-filter: blur(12px) saturate(1.25);
-  -webkit-backdrop-filter: blur(12px) saturate(1.25);
-  box-shadow: var(--glass-shadow);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.25s, border-color 0.25s, color 0.25s;
-}
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  background: var(--violet);
-  border-color: var(--violet);
-  color: #FFFFFF;
-}
-.theme-toggle:active {
-  transform: translateY(0) scale(0.96);
-}
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-}
-@media (max-width: 600px) {
-  .theme-toggle {
-    top: 12px;
-    right: 12px;
-    width: 40px;
-    height: 40px;
-  }
 }
 
 /* ── DARK THEME (no glow, flat like light) ── */

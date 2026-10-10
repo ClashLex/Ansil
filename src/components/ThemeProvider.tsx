@@ -2,7 +2,6 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useState,
@@ -11,10 +10,9 @@ import {
 
 export type Theme = 'light' | 'dark';
 
-const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
-  theme: 'light',
-  toggle: () => {},
-});
+const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
+
+const ThemeContext = createContext<{ theme: Theme }>({ theme: 'light' });
 
 export function useTheme() {
   return useContext(ThemeContext);
@@ -26,32 +24,25 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('theme');
-      if (stored === 'light' || stored === 'dark') {
-        setTheme(stored);
-        return;
-      }
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setTheme('dark');
-      }
-    } catch {
-      /* storage unavailable — stay on light */
+    const media = window.matchMedia(DARK_SCHEME_QUERY);
+    const sync = () => setTheme(media.matches ? 'dark' : 'light');
+
+    sync();
+
+    // Safari < 14 and some in-app WebKit shells only expose the legacy
+    // addListener/removeListener API on MediaQueryList.
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', sync);
+      return () => media.removeEventListener('change', sync);
     }
+
+    media.addListener(sync);
+    return () => media.removeListener(sync);
   }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    try {
-      localStorage.setItem('theme', theme);
-    } catch {
-      /* ignore */
-    }
   }, [theme]);
 
-  const toggle = useCallback(() => {
-    setTheme(t => (t === 'light' ? 'dark' : 'light'));
-  }, []);
-
-  return <ThemeContext.Provider value={{ theme, toggle }}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={{ theme }}>{children}</ThemeContext.Provider>;
 }

@@ -1,5 +1,4 @@
 import LinksSection from "@/components/LinksSection";
-import DarkModeButton from "@/components/DarkModeButton";
 import ThemedBackground from "@/components/ThemedBackground";
 import CustomCursor from "@/components/CustomCursor";
 import { ToastProvider } from "@/components/Toast";
@@ -12,7 +11,6 @@ export default function Home() {
         <CustomCursor />
         <ThemedBackground />
         <LinksSection />
-        <DarkModeButton />
       </ThemeProvider>
     </ToastProvider>
   );

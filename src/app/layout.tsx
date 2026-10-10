@@ -27,13 +27,20 @@ export const metadata: Metadata = {
     apple: "/Ansil/apple-icon.png",
   },
   other: {
-    "color-scheme": "light",
+    "color-scheme": "light dark",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FFFFFF",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 };
+
+// Runs before first paint so dark-mode visitors never see a white flash
+// while the ThemeProvider effect catches up.
+const THEME_INIT_SCRIPT = `(function(){try{var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -41,7 +48,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className={`${instrumentSerif.variable} ${inter.variable}`}>
         {children}
       </body>
