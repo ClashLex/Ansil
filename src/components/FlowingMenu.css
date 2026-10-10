@@ -40,15 +40,20 @@
 }
 
 .menu__item-arrow {
-  width: 0.52em;
-  height: 0.52em;
+  width: 0.68em;
+  height: 0.68em;
   flex-shrink: 0;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: butt;
-  stroke-linejoin: miter;
+  background-color: currentColor;
+  -webkit-mask-image: url('/Ansil/external-link-editorial.svg');
+  mask-image: url('/Ansil/external-link-editorial.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
   position: relative;
-  top: -0.085em;
+  top: -0.06em;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 

@@ -245,15 +245,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         style={{ color: textColor }}
       >
         {text}
-        <svg
-          className="menu__item-arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M4 20 20 4M9.5 4H20V14.5" />
-        </svg>
+        <img className="menu__item-arrow" src="/Ansil/external-link-editorial.svg" alt="" aria-hidden="true" />
       </a>
       <div className="marquee" ref={marqueeRef} style={{ backgroundColor: marqueeBgColor }}>
         <div className="marquee__inner-wrap">
