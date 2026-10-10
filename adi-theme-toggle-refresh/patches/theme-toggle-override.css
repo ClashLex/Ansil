@@ -1,0 +1,72 @@
+/* Append this block to src/app/globals.css after the existing theme-toggle rules. */
+.theme-toggle {
+  position: fixed;
+  top: 17px;
+  right: 18px;
+  z-index: 9000;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  width: auto;
+  height: auto;
+  padding: 3px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--glass-bg);
+  color: var(--ink);
+  box-shadow: none;
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.theme-toggle:hover {
+  transform: none;
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  color: var(--ink);
+}
+
+.theme-toggle:active {
+  transform: scale(0.98);
+}
+
+.theme-toggle__segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 27px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--graphite);
+  font-family: var(--ff-sans);
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.theme-toggle__segment.is-active {
+  background: var(--ink);
+  color: var(--offwhite);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .theme-toggle {
+    top: 12px;
+    right: 12px;
+  }
+
+  .theme-toggle__segment {
+    min-height: 26px;
+    padding: 0 9px;
+    font-size: 8px;
+  }
+}
